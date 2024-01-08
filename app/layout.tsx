@@ -2,19 +2,20 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
-import Header from "@/Components/Header";
-import Footer from "@/Components/Footer";
+import '@mantine/dates/styles.css';
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { MantineProvider } from "@mantine/core";
 
- const poppins = Poppins({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
 });
-const theme ={
+const theme = {
   fontFamily: poppins.className,
-}
+};
 
 export const metadata: Metadata = {
   title: "Evently",
@@ -30,9 +31,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={poppins.className}>
-          <MantineProvider theme={{
-            fontFamily: poppins.className,
-          }}>
+          <MantineProvider
+            theme={{
+              fontFamily: poppins.className,
+            }}
+          >
             <div className="flex flex-col h-screen  ">
               <Header />
               <main className="flex-1">{children}</main>

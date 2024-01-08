@@ -6,7 +6,7 @@
   .dotted-bg{
     background-image: url('../public/assets/images/dotted-pattern.png');
     background-repeat: no-repeat;
-    background-color: rgb(246 248 253);
+    background-color:  rgb(246 248 253) ;
     background-size: contain;
   }
 }

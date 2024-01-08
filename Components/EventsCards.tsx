@@ -1,18 +1,16 @@
 "use client";
-import { Text, TextInput, Combobox, useCombobox,Card } from "@mantine/core";
+import { Text, TextInput, Combobox, useCombobox } from "@mantine/core";
 import { useState } from "react";
 import CardFields from "./CardFields";
 import Image from "next/image";
 import search from "@/public/assets/icons/search.svg";
 import arrowDown from "@/public/assets/icons/caret-down-filled.svg";
 
-const fons = {
+export const fons = {
   input: {
     fontFamily: "var(--font-poppins)",
     fontSize: "16px",
     fontWeight: "400",
-    paddingTop: "25px",
-    paddingBottom: "25px",
   },
 };
 
@@ -31,7 +29,7 @@ const EventsCards = () => {
           Thousands of Events
         </Text>
       </div>
-      <div className="flex gap-4">
+      <div className="flex  gap-4">
         <TextInput
           leftSection={
             <Image src={search} width={24} height={24} alt="search" />
