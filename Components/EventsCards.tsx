@@ -5,6 +5,7 @@ import CardFields from "./CardFields";
 import Image from "next/image";
 import search from "@/public/assets/icons/search.svg";
 import arrowDown from "@/public/assets/icons/caret-down-filled.svg";
+import { DB } from "@/configs/types/supabase";
 
 export const fons = {
   input: {
@@ -14,10 +15,15 @@ export const fons = {
   },
 };
 
-const EventsCards = () => {
+const EventsCards = ({ data }: { data: DB }) => {
   const [value, setValue] = useState("Category");
+  const [categories, setCategories] = useState([
+    "All",
+    "Next Js",
+    "React Js",
+    "Tech",
+  ]);
   const combobox = useCombobox();
-  const categories = ["All", "Next Js", "React Js", "Tech"];
 
   return (
     <section className="flex flex-col px-10 pt-10  gap-12">
@@ -39,6 +45,7 @@ const EventsCards = () => {
           placeholder="Search title ..."
           radius="lg"
           className="grow "
+          size="lg"
           variant="filled"
         />
         <Combobox
@@ -54,7 +61,7 @@ const EventsCards = () => {
           <Combobox.Target>
             <div
               onClick={() => combobox.toggleDropdown()}
-              className="grow cursor-pointer"
+              className="w-[50%] cursor-pointer"
             >
               <TextInput
                 pointer
@@ -62,6 +69,7 @@ const EventsCards = () => {
                   <Image src={arrowDown} width={16} height={16} alt="arrow" />
                 }
                 styles={fons}
+                size="lg"
                 readOnly
                 radius="lg"
                 variant="filled"
@@ -72,21 +80,23 @@ const EventsCards = () => {
           <Combobox.Dropdown>
             {categories.map((e) => (
               <Combobox.Options key={e}>
-                <Text
-                  style={{ cursor: "pointer" }}
-                  onClick={(e) => {
-                    setValue(e.currentTarget.textContent!);
-                    combobox.toggleDropdown();
-                  }}
-                >
-                  {e}
-                </Text>
+                <Combobox.Option value={e} key={e}>
+                  <Text
+                    style={{ cursor: "pointer" }}
+                    onClick={(e) => {
+                      setValue(e.currentTarget.textContent!);
+                      combobox.toggleDropdown();
+                    }}
+                  >
+                    {e}
+                  </Text>
+                </Combobox.Option>
               </Combobox.Options>
             ))}
           </Combobox.Dropdown>
         </Combobox>
       </div>
-      <CardFields />
+      <CardFields data={data} />
     </section>
   );
 };

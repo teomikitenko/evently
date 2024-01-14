@@ -11,11 +11,11 @@ import {
   Checkbox,
   NumberInputHandlers,
 } from "@mantine/core";
-import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
-import { useForm, Controller } from "react-hook-form";
-import arrowDown from "@/public/assets/icons/caret-down-filled.svg";
-import { IconCaretUpFilled } from '@tabler/icons-react';
-import { IconCaretDownFilled } from '@tabler/icons-react';
+import { create } from "@/app/action";
+import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { IconCaretUpFilled } from "@tabler/icons-react";
+import { IconCaretDownFilled } from "@tabler/icons-react";
 import upload from "@/public/assets/icons/file-upload.svg";
 import location from "@/public/assets/icons/location-grey.svg";
 import calendar from "@/public/assets/icons/calendar.svg";
@@ -23,18 +23,24 @@ import dollar from "@/public/assets/icons/dollar.svg";
 import link from "@/public/assets/icons/link.svg";
 import { fons } from "./EventsCards";
 import { DateTimePicker } from "@mantine/dates";
-import { useRef } from "react";
+import {
+  BaseSyntheticEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const checkbox = {
-  input:{
-    border:'2px solid var(--mantine-color-violet-filled)'
+  input: {
+    border: "2px solid var(--mantine-color-violet-filled)",
   },
-  label:{
+  label: {
     fontFamily: "var(--font-poppins)",
     fontSize: "16px",
     fontWeight: "400",
-  }
-}
+  },
+};
 
 export const fons2 = {
   input: {
@@ -61,35 +67,69 @@ const numb = {
     paddingBottom: "15px",
   },
 };
+const drop = {
+  inner: {
+    width: "100%",
+  },
+};
+
+export type Values = {
+  title: string;
+  category: string;
+  description: string;
+  image: FileWithPath[];
+  location: string;
+  startDate: Date;
+  endDate: Date;
+  price: string;
+  url: string;
+};
+
 const EventForm = () => {
+  const [file, setFile] = useState<FileWithPath[] | undefined>();
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
   const categories = ["All", "Next Js", "React Js", "Tech"];
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
-      eventTitle: "",
+      title: "",
       category: "Category",
       description: "",
-      image: "",
+      image: undefined,
       location: "",
-      startDate: "",
-      endDate: "",
+      startDate: new Date(new Date().setDate(new Date().getDate() - 7)),
+      endDate: new Date(),
       price: "",
       url: "",
     },
   });
+   useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+     setFile(undefined)
+    }
+  }, [formState.isSubmitSuccessful]);
+  const onSubmit: SubmitHandler<Values> = async (data) => {
+    const form = new FormData();
+    Object.entries(data).map((e) => {
+       if (e[0] === "image"&& Array.isArray(e[1]) ){ form.append(e[0], e[1][0] )}
+      else form.append(e[0], e[1] as string ) ; 
+    });
+  
+    reset();
+   await create(form); 
+  };
 
-  const onSubmit = (data) => [console.log(data)];
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-3">
         <Controller
-          name="eventTitle"
+          name="title"
           control={control}
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <TextInput
               classNames={{ input: "poppins" }}
+              value={value}
               size="lg"
               styles={fons}
               onChange={onChange}
@@ -124,7 +164,11 @@ const EventForm = () => {
                     onBlur={onBlur}
                     pointer
                     rightSection={
-                      <IconCaretDownFilled width={10} h={10} className="dimmed"/>
+                      <IconCaretDownFilled
+                        width={10}
+                        height={10}
+                        className="dimmed"
+                      />
                     }
                     size="lg"
                     styles={fons}
@@ -148,7 +192,7 @@ const EventForm = () => {
           )}
         />
       </div>
-      <div className="flex gap-3">
+      <div className="flex  gap-3 ">
         <Controller
           name="description"
           control={control}
@@ -174,23 +218,20 @@ const EventForm = () => {
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <Dropzone
               bg={"rgb(241 245 249)"}
-              className="flex justify-center items-center w-[50%] rounded-2xl "
+              styles={{
+                inner: {
+                  width: "100%",
+                },
+              }}
+              className="flex w-[50%] rounded-2xl  "
               accept={IMAGE_MIME_TYPE}
               maxFiles={1}
               onDrop={(file) => {
                 onChange(file);
+                setFile(file);
               }}
             >
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-center">
-                  <Image src={upload} width={77} height={77} alt="download" />
-                </div>
-                <p className="text-center">Drag photo here</p>
-                <p className="text-center">SVG, PNG, JPG</p>
-                <Button variant="filled" color="violet" radius="xl" px={25}>
-                  <Text size="sm">Select from computer</Text>
-                </Button>
-              </div>
+              {file ? <Preview file={file} /> : <ImageContainer />}
             </Dropzone>
           )}
         />
@@ -224,10 +265,10 @@ const EventForm = () => {
           control={control}
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <DateTimePicker
-              clearable
               className="w-[50%]"
               radius="lg"
               variant="filled"
+              value={value}
               valueFormat="DD/MMM/YYYY hh:mm A"
               defaultValue={
                 new Date(new Date().setDate(new Date().getDate() - 7))
@@ -263,8 +304,9 @@ const EventForm = () => {
               className="w-[50%]"
               clearable
               radius="lg"
+              value={value}
               variant="filled"
-              valueFormat="DD/MMM/YYYY hh:mm A"
+              valueFormat="ddd, MMM D, YYYY h:mm A	"
               defaultValue={new Date()}
               onChange={onChange}
               onBlur={onBlur}
@@ -294,7 +336,7 @@ const EventForm = () => {
           control={control}
           render={({ field: { onChange, onBlur, value, ref } }) => (
             <NumberInput
-            handlersRef={handlersRef}
+              handlersRef={handlersRef}
               size="lg"
               classNames={{ input: "poppins" }}
               styles={numb}
@@ -305,11 +347,17 @@ const EventForm = () => {
               rightSection={
                 <div className="flex gap-2">
                   <div className="flex flex-col">
-                    <button onClick={() => handlersRef.current?.increment()} className="w-[15px] h-[12px] flex justify-center items-center hover:bg-gray-300">
-                     <IconCaretUpFilled className="dimmed"/>
+                    <button
+                      onClick={() => handlersRef.current?.increment()}
+                      className="w-[15px] h-[12px] flex justify-center items-center hover:bg-gray-300"
+                    >
+                      <IconCaretUpFilled className="dimmed" />
                     </button>
-                    <button onClick={() => handlersRef.current?.decrement()} className="w-[15px] h-[12px] flex justify-center items-center   hover:bg-gray-300 ">
-                    <IconCaretDownFilled className="dimmed"/>
+                    <button
+                      onClick={() => handlersRef.current?.decrement()}
+                      className="w-[15px] h-[12px] flex justify-center items-center   hover:bg-gray-300 "
+                    >
+                      <IconCaretDownFilled className="dimmed" />
                     </button>
                   </div>
                   <Checkbox
@@ -352,11 +400,45 @@ const EventForm = () => {
           )}
         />
       </div>
-      <button className="w-full bg-violet-500 rounded-full py-2" type="submit">
-       <p className="text-white">Create Event</p> 
-       </button>
+      <button 
+        className="w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
+        type="submit"
+      >
+        <p className="text-white">Create Event</p>
+      </button>
     </form>
   );
 };
 
 export default EventForm;
+const Preview = ({ file }: { file: FileWithPath[] }) => {
+  const imageUrl = URL.createObjectURL(file[0]);
+  return (
+    <div className="w-full h-[263px]">
+      <Image
+        className=" w-full h-full object-cover rounded-2xl "
+        width={0}
+        height={0}
+        src={imageUrl}
+        onLoad={() => URL.revokeObjectURL(imageUrl)}
+        alt="preview"
+      />
+    </div>
+  );
+};
+const ImageContainer = () => {
+  return (
+    <div className="flex justify-center items-center w-full h-full">
+      <div className="flex w-[50%]  flex-col gap-4">
+        <div className="flex justify-center">
+          <Image src={upload} width={77} height={77} alt="download" />
+        </div>
+        <p className="text-center">Drag photo here</p>
+        <p className="text-center">SVG, PNG, JPG</p>
+        <Button variant="filled" color="violet" radius="xl">
+          <Text size="sm">Select from computer</Text>
+        </Button>
+      </div>
+    </div>
+  );
+};

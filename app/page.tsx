@@ -1,11 +1,12 @@
-import Image from "next/image";
+import { getData } from "@/configs/db";
 import HeroSection from "@/components/HeroSection";
 import EventsCards from "@/components/EventsCards";
-export default function Home() {
+export default async function Home() {
+  const data = await getData();
   return (
-    <div >
-    <HeroSection/>
-    <EventsCards/>
+    <div>
+      <HeroSection />
+      <EventsCards data={data} />
     </div>
   );
 }
