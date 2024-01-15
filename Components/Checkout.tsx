@@ -22,6 +22,7 @@ const Checkout = ({ event }: { event: Event }) => {
     }
   }, []);
   const submitHandler = async () => {
+    //TODO add to db
     await checkout(event.event);
   };
   return (
