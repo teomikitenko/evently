@@ -5,7 +5,7 @@ import CardFields from "./CardFields";
 import Image from "next/image";
 import search from "@/public/assets/icons/search.svg";
 import arrowDown from "@/public/assets/icons/caret-down-filled.svg";
-import { DB } from "@/configs/types/supabase";
+import { DB } from "@/configs/types/types";
 
 export const fons = {
   input: {

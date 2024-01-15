@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
 import {
   TextInput,
   Textarea,
@@ -23,13 +24,7 @@ import dollar from "@/public/assets/icons/dollar.svg";
 import link from "@/public/assets/icons/link.svg";
 import { fons } from "./EventsCards";
 import { DateTimePicker } from "@mantine/dates";
-import {
-  BaseSyntheticEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
 const checkbox = {
   input: {
@@ -87,9 +82,11 @@ export type Values = {
 
 const EventForm = () => {
   const [file, setFile] = useState<FileWithPath[] | undefined>();
+  const [free, setFree] = useState(false);
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
   const categories = ["All", "Next Js", "React Js", "Tech"];
+  const {user} = useUser();
 
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
@@ -104,20 +101,22 @@ const EventForm = () => {
       url: "",
     },
   });
-   useEffect(() => {
+  useEffect(() => {
     if (formState.isSubmitSuccessful) {
-     setFile(undefined)
+      setFile(undefined);
     }
   }, [formState.isSubmitSuccessful]);
   const onSubmit: SubmitHandler<Values> = async (data) => {
     const form = new FormData();
     Object.entries(data).map((e) => {
-       if (e[0] === "image"&& Array.isArray(e[1]) ){ form.append(e[0], e[1][0] )}
-      else form.append(e[0], e[1] as string ) ; 
+      if (e[0] === "image" && Array.isArray(e[1])) {
+        form.append(e[0], e[1][0]);
+      } else form.append(e[0], e[1] as string);
     });
-  
+    form.append("free", JSON.stringify(free));
+    form.append('creater',user?.fullName!)
     reset();
-   await create(form); 
+    await create(form);
   };
 
   return (
@@ -269,7 +268,7 @@ const EventForm = () => {
               radius="lg"
               variant="filled"
               value={value}
-              valueFormat="DD/MMM/YYYY hh:mm A"
+              valueFormat="ddd, MMM D, YYYY h:mm A"
               defaultValue={
                 new Date(new Date().setDate(new Date().getDate() - 7))
               }
@@ -306,7 +305,7 @@ const EventForm = () => {
               radius="lg"
               value={value}
               variant="filled"
-              valueFormat="ddd, MMM D, YYYY h:mm A	"
+              valueFormat="ddd, MMM D, YYYY h:mm A"
               defaultValue={new Date()}
               onChange={onChange}
               onBlur={onBlur}
@@ -338,39 +337,47 @@ const EventForm = () => {
             <NumberInput
               handlersRef={handlersRef}
               size="lg"
-              classNames={{ input: "poppins" }}
               styles={numb}
+              readOnly={free}
               leftSection={
                 <Image src={dollar} width={24} height={24} alt="dollar" />
               }
               rightSectionWidth={200}
               rightSection={
                 <div className="flex gap-2">
-                  <div className="flex flex-col">
-                    <button
-                      onClick={() => handlersRef.current?.increment()}
-                      className="w-[15px] h-[12px] flex justify-center items-center hover:bg-gray-300"
-                    >
-                      <IconCaretUpFilled className="dimmed" />
-                    </button>
-                    <button
-                      onClick={() => handlersRef.current?.decrement()}
-                      className="w-[15px] h-[12px] flex justify-center items-center   hover:bg-gray-300 "
-                    >
-                      <IconCaretDownFilled className="dimmed" />
-                    </button>
-                  </div>
+                  {
+                    <div className="flex flex-col items-baseline">
+                      <button
+                        type="button"
+                        disabled={free}
+                        onClick={() => handlersRef.current?.increment()}
+                        className="w-[15px] h-[12px] flex justify-center items-center hover:bg-gray-300"
+                      >
+                        <IconCaretUpFilled className="dimmed" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={free}
+                        onClick={() => handlersRef.current?.decrement()}
+                        className="w-[15px] h-[12px] flex justify-center items-center   hover:bg-gray-300 "
+                      >
+                        <IconCaretDownFilled className="dimmed" />
+                      </button>
+                    </div>
+                  }
                   <Checkbox
                     labelPosition="left"
                     label="Free ticket"
                     styles={checkbox}
                     color="violet"
+                    checked={free}
+                    onChange={(event) => setFree(event.currentTarget.checked)}
                   />
                 </div>
               }
               onChange={onChange}
               onBlur={onBlur}
-              value={value}
+              value={free ? "" : value}
               placeholder="Price"
               radius="lg"
               className="w-[50%]"
@@ -400,7 +407,7 @@ const EventForm = () => {
           )}
         />
       </div>
-      <button 
+      <button
         className="w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
         type="submit"
       >

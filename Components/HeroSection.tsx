@@ -5,7 +5,7 @@ import { Text, Button } from "@mantine/core";
 
 const HeroSection = () => {
   return (
-    <section >
+    <section>
       <div className="dotted-bg h-full w-full flex px-10  py-9 gap-5">
         <div className="flex flex-col  gap-7 w-1/2">
           <Text

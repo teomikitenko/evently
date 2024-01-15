@@ -1,8 +1,13 @@
-import React from 'react'
+import { currentUser } from '@clerk/nextjs';
 
-const MyProfile = () => {
+
+const MyProfile = async() => {
+  const user = await currentUser(); 
+  console.log(user)
   return (
-    <div>MyProfile</div>
+    <div>
+      <p>hello</p>
+      {user?.firstName}</div>
   )
 }
 

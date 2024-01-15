@@ -6,21 +6,31 @@ export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-export async function getImage() {
-  const { data } = supabase.storage
-    .from("evently")
-    .getPublicUrl("img/image.jpg");
-  return data;
-}
-export async function getEvents() {
-  let { data: events, error } = await supabase.from("events").select("*");
+export async function getEvent(id:string) {
+  const { data:event, error } = await supabase
+  .from('events')
+  .select()
+  .eq('id', id)
 
-  return events;
+  const { data:image } = await supabase
+  .storage
+  .from('evently')
+  .list('img', {
+    limit: 100,
+    offset: 0,
+    sortBy: { column: 'name', order: 'asc' },
+    search: event![0].title!
+  })
+  return {
+    event:event![0],
+    storage:image
+  }
 }
 export async function addEvent(form: FormData) {
   const obj = Object.fromEntries(form.entries());
   const { image, ...rest } = obj;
-  const img = form.get("image") as File;
+  rest.free = JSON.parse(rest.free as string)
+   const img = form.get("image") as File;
   const type = img.type.split("/")[1];
 
   await supabase.from("events").insert([rest]).select();
@@ -41,5 +51,5 @@ export async function getData() {
   return {
     events: events!,
     storage: images!,
-  };
+  }; 
 }
