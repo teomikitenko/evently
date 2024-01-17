@@ -4,7 +4,7 @@ import EventsCards from "@/components/EventsCards";
 export default async function Home() {
   const data = await getData();
   return (
-    <div>
+    <div className="pb-10">
       <HeroSection />
       <EventsCards data={data} />
     </div>

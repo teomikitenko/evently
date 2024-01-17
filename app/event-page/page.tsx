@@ -6,8 +6,8 @@ import { getEvent } from "@/configs/db";
 const EventPage = async ({searchParams}:{searchParams:{id:string}}) => {
   const event = await getEvent(searchParams.id)
   return (
-    <section className="py-9 flex flex-col gap-16">
-       <div className=" h-[670px] dotted-bg w-full">
+    <section className="py-9 w-full h-full flex flex-col gap-16 ">
+       <div className="dotted-bg w-full h-full">
         <Event event={event} />
       </div>
       <Related/> 

@@ -86,7 +86,7 @@ const EventForm = () => {
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
   const categories = ["All", "Next Js", "React Js", "Tech"];
-  const {user} = useUser();
+  const { user } = useUser();
 
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
@@ -114,7 +114,7 @@ const EventForm = () => {
       } else form.append(e[0], e[1] as string);
     });
     form.append("free", JSON.stringify(free));
-    form.append('creater',user?.fullName!)
+    form.append("creater", user?.fullName!);
     reset();
     await create(form);
   };

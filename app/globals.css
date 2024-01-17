@@ -10,3 +10,8 @@
     background-size: contain;
   }
 }
+@layer components {
+  .animation-badge {
+    @apply transition duration-150 ease-linear opacity-0 absolute right-4 top-4 bg-slate-50
+  }
+}

@@ -1,27 +1,29 @@
 "use client";
 import Image from "next/image";
-import { Button, Text, Title } from "@mantine/core";
 import calendar from "@/public/assets/icons/calendar.svg";
+import { SignedIn } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import location from "@/public/assets/icons/location.svg";
 import type { Event } from "@/configs/types/types";
 import Checkout from "./Checkout";
 const Event = ({ event }: { event: Event }) => {
+  const { user } = useUser();
   return (
-    <div className="flex gap-8 h-full px-9 ">
-      <div className="w-[55%]  h-full ">
-        {/* TOOD - fix image */}
+    <div className="flex w-full gap-6 h-full pl-1 pr-3">
+      <div className="w-[62%] h-full ">
         <Image
-          className="h-full object-cover "
+          className="object-cover object-center	 h-full"
           src={`https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${
             event!.storage![0].name
           } `}
-          height={1000}
-          width={1000}
+          height={10000}
+          width={10000}
+          quality={100}
           alt="img"
         />
       </div>
 
-      <div className="flex flex-col h-full w-[45%] gap-9 pt-5 ">
+      <div className="flex flex-col h-full w-[45%]  gap-9 pt-5 ">
         <h2 className="font-bold text-4xl">{event.event.title}</h2>
         <div className="flex gap-6">
           <span className="font-bold  text-lg rounded-full flex items-center bg-green-100 px-5 py-2 text-green-700">
@@ -38,10 +40,11 @@ const Event = ({ event }: { event: Event }) => {
           </span>
         </div>
         <div>
-          <Checkout event={event} />
-          {/* <Button variant="filled" color="violet" radius="xl" size="md">
-            <p className="text-sm">Buy Ticket</p>
-          </Button> */}
+          <SignedIn>
+            {user?.fullName !== event.event.creater && (
+              <Checkout event={event} />
+            )}
+          </SignedIn>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex gap-2">

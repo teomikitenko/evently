@@ -3,7 +3,7 @@ import type { DB } from "@/configs/types/types";
 
 const CardFields = ({ data }: { data: DB }) => {
   return (
-    <div className="grid gap-9 grid-rows-2 grid-cols-3">
+    <div className="grid gap-9  grid-cols-3">
       {data.events.map((e) => {
         const image = data.storage.filter(
           (img) => img.name.split(".")[0] === e.title
