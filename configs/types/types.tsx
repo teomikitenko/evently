@@ -3,8 +3,8 @@ import { Tables } from "./supabase";
 
 export type Tickets = Tables<'buyers'> & {events:Tables<'events'>}
 export type DB = {
-  events: Tables<"events">[];
-  storage: FileObject[];
+  events: Tables<"events">[]|null;
+  storage: FileObject[]|null;
 };
 export type Event = {
   event: Tables<"events">;

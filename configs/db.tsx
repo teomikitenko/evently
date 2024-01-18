@@ -1,4 +1,4 @@
-import { createClient, QueryData } from "@supabase/supabase-js";
+import { createClient} from "@supabase/supabase-js";
 import { Database } from "./types/supabase";
 import type { Buyer } from "./types/types";
 import { Tickets } from "./types/types";
@@ -7,7 +7,24 @@ export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
 
-export async function getEvent(id: string) {
+
+ export const getEventsByCategory = async(category:string,exepId:string)=>{
+  const { data: events, error } = await supabase
+  .from("events")
+  .select()
+  .not('id','in',`(${exepId})`)
+  .eq("category", category)
+  const { data: images } = await supabase.storage.from("evently").list("img", {
+    limit: 100,
+    offset: 0,
+  });
+  return{
+     events:events,
+     storage:images
+  }
+
+ }
+export async function getEvent(id: string,) {
   const { data: event, error } = await supabase
     .from("events")
     .select()

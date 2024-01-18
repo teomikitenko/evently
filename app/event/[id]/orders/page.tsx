@@ -1,9 +1,9 @@
 import React from 'react'
 //TODO:Stripe webHooks 
-const page = () => {
+const Orders = () => {
   return (
-    <div>page</div>
+    <div>Orders</div>
   )
 }
 
-export default page
+export default Orders

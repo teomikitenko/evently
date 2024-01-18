@@ -1,3 +1,4 @@
+'use client'
 import CardEvent from "./CardEvent";
 import type { DB } from "@/configs/types/types";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ const CardFields = ({
 
   const filteredArray = (array: DB["events"], text: string) => {
     const reg = new RegExp(text as string, "i");
-    const res = array.filter((e) => {
+    const res = array!.filter((e) => {
       const find = e.title?.match(reg);
       if (find) return true;
     });
@@ -25,12 +26,12 @@ const CardFields = ({
   };
   useEffect(() => {
     if (category !== "Category" && category !== "All") {
-      const events = data.events.filter((e) => e.category === category);
+      const events = data.events!.filter((e) => e.category === category);
       filteredArray(events, filteredValue);
     } else filteredArray(data.events, filteredValue);
   }, [category, filteredValue]);
-  return fillteredEvents.length > 0 ? (
-    <FoundEvents events={fillteredEvents} images={data.storage} />
+  return fillteredEvents!.length > 0 ? (
+    <Events events={fillteredEvents} images={data.storage!} />
   ) : (
     <NotFoundEvents />
   );
@@ -50,7 +51,7 @@ const NotFoundEvents = () => {
     </div>
   );
 };
-const FoundEvents = ({
+export const Events = ({
   events,
   images,
 }: {
@@ -58,8 +59,8 @@ const FoundEvents = ({
   images: FileObject[];
 }) => {
   return (
-    <div className="grid gap-9 transition-[opacity]  grid-cols-3">
-      {events.map((e,index) => {
+    <div className="grid gap-9 grid-cols-3">
+      {events!.map((e) => {
         const image = images.filter(
           (img) => img.name.split(".")[0] === e.title
         );

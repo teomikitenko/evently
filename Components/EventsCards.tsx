@@ -22,7 +22,7 @@ const EventsCards = ({ data }: { data: DB }) => {
   const combobox = useCombobox();
 
   useEffect(() => {
-    let arr = data.events.reduce((sum, current) => {
+    let arr = data.events!.reduce((sum, current) => {
       sum.push(current.category!);
       return sum;
     }, [] as string[]);
