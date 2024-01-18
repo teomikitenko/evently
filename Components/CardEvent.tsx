@@ -17,7 +17,7 @@ const CardEvent = ({
   organized?: boolean;
 }) => {
   return (
-    <Link href={`/event-page?id=${event.id}`}>
+    <Link href={`/event/${event.id}`}>
       <Card
         className="hover:shadow-lg"
         shadow="sm"

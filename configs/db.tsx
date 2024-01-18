@@ -39,7 +39,7 @@ export async function addEvent(form: FormData) {
       upsert: false,
     });
 }
-export async function getData() {
+export async function getAllEvents() {
   let { data: events } = await supabase.from("events").select("*");
   const { data: images } = await supabase.storage.from("evently").list("img", {
     limit: 100,

@@ -1,6 +1,6 @@
 "use client";
 import { Text, TextInput, Combobox, useCombobox } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardFields from "./CardFields";
 import Image from "next/image";
 import search from "@/public/assets/icons/search.svg";
@@ -16,14 +16,18 @@ export const fons = {
 };
 
 const EventsCards = ({ data }: { data: DB }) => {
+  const [text, setText] = useState<string>("");
   const [value, setValue] = useState("Category");
-  const [categories, setCategories] = useState([
-    "All",
-    "Next Js",
-    "React Js",
-    "Tech",
-  ]);
+  const [categories, setCategories] = useState<string[]>([]);
   const combobox = useCombobox();
+
+  useEffect(() => {
+    let arr = data.events.reduce((sum, current) => {
+      sum.push(current.category!);
+      return sum;
+    }, [] as string[]);
+    setCategories(Array.from(new Set(["All", ...arr])));
+  }, [data]);
 
   return (
     <section className="flex flex-col px-10 pt-10  gap-12">
@@ -44,6 +48,8 @@ const EventsCards = ({ data }: { data: DB }) => {
           styles={fons}
           placeholder="Search title ..."
           radius="lg"
+          onChange={(event) => setText(event.currentTarget.value)}
+          value={text}
           className="grow "
           size="lg"
           variant="filled"
@@ -96,7 +102,7 @@ const EventsCards = ({ data }: { data: DB }) => {
           </Combobox.Dropdown>
         </Combobox>
       </div>
-      <CardFields data={data} />
+      <CardFields filteredValue={text!} category={value} data={data} />
     </section>
   );
 };
