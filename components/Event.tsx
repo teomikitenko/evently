@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import calendar from "@/public/assets/icons/calendar.svg";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import location from "@/public/assets/icons/location.svg";
 import type { Event } from "@/configs/types/types";

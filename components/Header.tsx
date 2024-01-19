@@ -23,12 +23,11 @@ const Header = () => {
         </Link>
         <SignedOut>
           <SignUpButton>
-            <Button variant="filled" color="violet" radius="xl" px={25}>
+             <Button  variant="filled" color="violet" radius="xl" type="button" px={25}>
               <Text size="sm">Login</Text>
             </Button>
           </SignUpButton>
         </SignedOut>
-
         <SignedIn>
           <ul className="flex gap-12 px-3 align-middle">
             {links.map((e) => (
