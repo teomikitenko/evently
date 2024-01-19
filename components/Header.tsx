@@ -1,5 +1,5 @@
 'use client'
-import logo from "@/public/assets/images/logo.svg";
+import logo from "../public/assets/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Text } from "@mantine/core";

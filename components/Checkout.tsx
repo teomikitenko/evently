@@ -2,7 +2,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 import type { Event,Buyer } from "@/configs/types/types";
 import { useUser } from "@clerk/nextjs"
-import { Button, Text, Title } from "@mantine/core";
+import { Button} from "@mantine/core";
 import { useEffect } from "react";
 import { checkout } from "@/app/action";
 import { buyers } from "@/configs/db";

@@ -1,5 +1,5 @@
 import React from "react";
-import hero from "@/public/assets/images/hero.png";
+import hero from "../public/assets/images/hero.png";
 import Image from "next/image";
 import { Text, Button } from "@mantine/core";
 
