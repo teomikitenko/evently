@@ -135,7 +135,7 @@ const EventForm = () => {
               onBlur={onBlur}
               placeholder="Event title"
               radius="lg"
-              className="w-[50%]  "
+              className="w-[50%]"
               variant="filled"
             />
           )}
@@ -418,6 +418,7 @@ const EventForm = () => {
 };
 
 export default EventForm;
+
 const Preview = ({ file }: { file: FileWithPath[] }) => {
   const imageUrl = URL.createObjectURL(file[0]);
   return (
