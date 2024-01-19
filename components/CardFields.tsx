@@ -4,7 +4,6 @@ import type { DB } from "@/configs/types/types";
 import { useEffect, useState } from "react";
 import { FileObject } from "@supabase/storage-js";
 
-//TODO:maybe timeout use
 const CardFields = ({
   data,
   category,
@@ -31,11 +30,17 @@ const CardFields = ({
     } else filteredArray(data.events, filteredValue);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, filteredValue]);
-  return fillteredEvents!.length > 0 ? (
-    <Events events={fillteredEvents} images={data.storage!} />
-  ) : (
-    <NotFoundEvents />
-  );
+  return(
+    <>
+    {fillteredEvents!.length > 0 ? (
+      <Events events={fillteredEvents} images={data.storage!} />
+    ) : (
+      <NotFoundEvents />
+    )}
+    </>
+  )
+
+  
 };
 
 export default CardFields;

@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="border-t-2 w-full px-10 py-5 flex justify-between">
       <Image src={logo} width={120} height={30} alt="logo" />
-      <Text>2023 Evently All Right reserved</Text>
+      <Text>2024 Evently All Right reserved</Text>
     </footer>
   );
 };
