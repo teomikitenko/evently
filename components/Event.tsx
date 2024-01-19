@@ -67,7 +67,7 @@ const Event = ({ event }: { event: Event }) => {
           </div>
         </div>
         <div className="flex flex-col gap-1 ">
-          <p className="text-lg font-bold text-gray-500">What You'll Learn:</p>
+          <p className="text-lg font-bold text-gray-500">What You&apos;ll Learn:</p>
           <p>{event.event.description}</p>
           <p className="text-indigo-600 underline mt-5">{event.event.url}</p>
         </div>
