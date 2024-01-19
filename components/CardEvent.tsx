@@ -1,11 +1,11 @@
 "use client";
 import { Card, Text, Group, darken } from "@mantine/core";
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import Link from "next/link";
 import { Tables } from "@/configs/types/supabase";
 import { FileObject } from "@supabase/storage-js";
-import del from '@/public/assets/icons/delete.svg';
-import edit from '@/public/assets/icons/edit.svg';
+import del from "@/public/assets/icons/delete.svg";
+import edit from "@/public/assets/icons/edit.svg";
 
 const CardEvent = ({
   event,
@@ -16,6 +16,12 @@ const CardEvent = ({
   image: FileObject[];
   organized?: boolean;
 }) => {
+  const myLoader = ({ src, width, quality }: ImageLoaderProps) => {
+    return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
+      quality || 75
+    }`;
+  };
+
   return (
     <Link href={`/event/${event.id}`}>
       <Card
@@ -29,7 +35,8 @@ const CardEvent = ({
           <div className="h-[222px] relative group">
             <Image
               className="object-cover w-full h-full"
-              src={`https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${image[0].name} `}
+              src={`${image[0].name}`}
+              loader={myLoader}
               width={1000}
               height={360}
               alt="Norway"
@@ -70,8 +77,8 @@ export default CardEvent;
 const EditBadge = () => {
   return (
     <div className="animation-badge group-hover:opacity-100 flex flex-col py-2 px-2 gap-3 rounded-lg">
-    <Image src={edit} width={20} height={20} alt="edit"/>
-    <Image src={del} width={20} height={20} alt="del"/>
+      <Image src={edit} width={20} height={20} alt="edit" />
+      <Image src={del} width={20} height={20} alt="del" />
     </div>
   );
 };
