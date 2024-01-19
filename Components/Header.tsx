@@ -6,7 +6,7 @@ import { Button, Text } from "@mantine/core";
 import { UserButton, SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
 import { usePathname } from 'next/navigation'
 
-
+//sm
 const Header = () => {
   const pathname = usePathname()
   const links = [
