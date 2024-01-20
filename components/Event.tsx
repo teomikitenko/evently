@@ -13,9 +13,12 @@ const Event = ({ event }: { event: Event }) => {
       <div className="w-[62%] h-full ">
         <Image
           className="object-cover object-center	 h-full"
-          src={`https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${
-            event!.storage![0].name
-          } `}
+          loader={({ src, width, quality }) => {
+            return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
+              quality || 75
+            }`;
+          }}
+          src={`${event!.storage![0].name}`}
           height={10000}
           width={10000}
           quality={100}
@@ -67,7 +70,9 @@ const Event = ({ event }: { event: Event }) => {
           </div>
         </div>
         <div className="flex flex-col gap-1 ">
-          <p className="text-lg font-bold text-gray-500">What You&apos;ll Learn:</p>
+          <p className="text-lg font-bold text-gray-500">
+            What You&apos;ll Learn:
+          </p>
           <p>{event.event.description}</p>
           <p className="text-indigo-600 underline mt-5">{event.event.url}</p>
         </div>
