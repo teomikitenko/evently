@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic'
 const stripe = require('stripe')('sk_test_...');
 
 export async function POST(request:Request){

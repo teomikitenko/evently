@@ -7,8 +7,12 @@ import type Event from '@/components/Event';
  const stripe = require('stripe')(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 
 export async function create(formData:FormData) {
+  try {
     await addEvent(formData)
-    revalidatePath('/') 
+    revalidatePath('/')  
+  } catch (error) {
+    throw error
+  }
 }
 export async function checkout({event,user}:{event:Event['event'],user:Buyer['name']}){
     const {title,category,price,id,free} =  event
