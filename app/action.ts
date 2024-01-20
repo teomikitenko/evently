@@ -1,10 +1,10 @@
 'use server'
+import Stripe from 'stripe';
 import { revalidatePath } from 'next/cache'
 import { addEvent} from "@/configs/db"
 import { redirect } from "next/navigation";
 import type { Buyer } from '@/configs/types/types';
 import type Event from '@/components/Event';
- const stripe = require('stripe')(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 
 export async function create(formData:FormData) {
   try {
@@ -15,12 +15,13 @@ export async function create(formData:FormData) {
   }
 }
 export async function checkout({event,user}:{event:Event['event'],user:Buyer['name']}){
+  const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
     const {title,category,price,id,free} =  event
     const currentPrice = free?'0':Number(price)*100
      try {
       const session = await stripe.checkout.sessions.create({
-        success_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}/profile`,
-        cancel_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}`,
+        success_url:`${process.env.NEXT_PUBLIC_SERVER_URL as string}/profile`,
+        cancel_url:`${process.env.NEXT_PUBLIC_SERVER_URL as string}`,
         mode:'payment',
       line_items:[
         { 
