@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "./types/supabase";
 import type { Buyer } from "./types/types";
 import { Tickets } from "./types/types";
+
 export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
@@ -91,6 +92,7 @@ export async function buyers(buyer: Buyer) {
       .from("buyers")
       .insert([buyer])
       .select();
+      return data
   } catch (error) {
     throw error;
   }

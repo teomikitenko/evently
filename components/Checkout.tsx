@@ -1,8 +1,8 @@
 "use client";
 import { loadStripe } from "@stripe/stripe-js";
-import type { Event,Buyer } from "@/configs/types/types";
-import { useUser } from "@clerk/nextjs"
-import { Button} from "@mantine/core";
+import type { Event, Buyer } from "@/configs/types/types";
+import { useUser } from "@clerk/nextjs";
+import { Button } from "@mantine/core";
 import { useEffect } from "react";
 import { checkout } from "@/app/action";
 import { buyers } from "@/configs/db";
@@ -26,20 +26,26 @@ const Checkout = ({ event }: { event: Event }) => {
     }
   }, []);
   const submitHandler = async () => {
-    const buyer:Buyer={
-      name:user?.fullName,
-      event_id:event.event.id
-    }
+    const buyer: Buyer = {
+      name: user?.fullName,
+      event_id: event.event.id,
+    };
     const check = {
-      event:event.event,
-      user:user?.fullName
-    }
-    await buyers(buyer)
+      event: event.event,
+      user: user?.fullName,
+    };
+    //delete
     await checkout(check);
   };
   return (
     <form action={submitHandler}>
-      <Button type="submit" variant="filled" color="violet" radius="xl" size="md">
+      <Button
+        type="submit"
+        variant="filled"
+        color="violet"
+        radius="xl"
+        size="md"
+      >
         <p className="text-sm">Buy Ticket</p>
       </Button>
     </form>

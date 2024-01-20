@@ -3,6 +3,7 @@ import { authMiddleware } from "@clerk/nextjs";
    publicRoutes: [
     '/',
     '/api/webhook/stripe',
+    '/event/(.*)'
    ],
    ignoredRoutes: [
     '/api/webhook/clerk',

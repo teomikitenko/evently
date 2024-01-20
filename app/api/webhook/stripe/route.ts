@@ -1,5 +1,8 @@
 import stripe from 'stripe'
 import { NextResponse } from 'next/server'
+import { buyers } from "@/configs/db";
+import type { Buyer } from '@/configs/types/types';
+
 
 export  async function POST(request:Request){
   const body = await request.text()
@@ -19,7 +22,12 @@ export  async function POST(request:Request){
     case 'checkout.session.completed':
       const checkoutSessionCompleted = event.data.object;
       // Then define and call a function to handle the event checkout.session.completed
-      return NextResponse.json({ message: 'OK', data:checkoutSessionCompleted})
+      const order:Buyer = {
+        event_id:checkoutSessionCompleted.metadata?.id_event as string,
+        name:checkoutSessionCompleted.customer_details!.name as string
+      }
+      const data = await buyers(order)
+      return NextResponse.json({ message: 'OK', data:data})
     // ... handle other event types
      default:
       console.log(`Unhandled event type ${event.type}`); 
@@ -32,3 +40,5 @@ export  async function POST(request:Request){
   })
   
 };
+
+

@@ -31,7 +31,10 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
             },
             quantity:1
           },
-        ],  
+        ],
+        metadata:{
+          id_event:id
+        },  
         mode:'payment',
         success_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}/profile`,
         cancel_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}`,
