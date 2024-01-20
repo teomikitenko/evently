@@ -15,7 +15,7 @@ export async function checkout({event,user}:{event:Event['event'],user:Buyer['na
     const currentPrice = free?'0':Number(price)*100
      try {
       const session = await stripe.checkout.sessions.create({
-        success_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}/profile?name=${user}`,
+        success_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}/profile`,
         cancel_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}`,
         mode:'payment',
       line_items:[
