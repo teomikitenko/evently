@@ -7,6 +7,7 @@ import { FileObject } from "@supabase/storage-js";
 import del from "@/public/assets/icons/delete.svg";
 import edit from "@/public/assets/icons/edit.svg";
 import arrow from "@/public/assets/icons/arrow.svg";
+import { useEffect, useState } from "react";
 
 const CardEvent = ({
   event,
@@ -17,11 +18,17 @@ const CardEvent = ({
   image: FileObject[];
   organized?: boolean;
 }) => {
+  const [org, setorg] = useState<boolean>(false)
   const myLoader = ({ src, width, quality }: ImageLoaderProps) => {
     return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
       quality || 75
     }`;
   };
+  useEffect(()=>{
+  if(organized){
+    setorg(true)
+  }
+  },[organized])
 
   return (
     <Link href={`/event/${event.id}`}>
@@ -68,16 +75,14 @@ const CardEvent = ({
             <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
               {event.creater}
             </Text>
-            {organized && (
-              <>
+             {org && (
               <Link href={`event/${event.id}/orders`}>
                 <div className="flex gap-2">
                   <p className="text-center text-[#624CF5]">Order Detail</p>
                   <Image src={arrow} width={10} height={10} alt="arrow" />
                 </div>
               </Link>
-              </>
-            )}
+            )} 
           </div>
         </div>
       </Card>

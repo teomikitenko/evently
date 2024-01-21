@@ -26,10 +26,6 @@ const Checkout = ({ event }: { event: Event }) => {
     }
   }, []);
   const submitHandler = async () => {
-    const buyer: Buyer = {
-      name: user?.fullName,
-      event_id: event.event.id,
-    };
     const check = {
       event: event.event,
       user: user?.fullName,

@@ -142,7 +142,7 @@ export async function getOrderDetails(id: string) {
     .select(
       `*,
     events (
-      price,free)`
+      price,free,title)`
     );
   return data;
 }

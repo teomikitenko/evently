@@ -21,7 +21,8 @@ export  async function POST(request:Request){
       const checkoutSessionCompleted = event.data.object;
       const order:Buyer = {
         event_id:checkoutSessionCompleted.metadata?.id_event as string,
-        name:checkoutSessionCompleted.metadata?.name as string
+        name:checkoutSessionCompleted.metadata?.name as string,
+        order_id:checkoutSessionCompleted.id as string,
       }
       const data = await buyers(order)
       return NextResponse.json({ message: 'OK', data:data})
