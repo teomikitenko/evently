@@ -92,7 +92,7 @@ export async function buyers(buyer: Buyer) {
       .from("buyers")
       .insert([buyer])
       .select();
-      return data
+    return data;
   } catch (error) {
     throw error;
   }
@@ -132,4 +132,17 @@ export async function getProfileEvents(name: string) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function getOrderDetails(id: string) {
+  const { data, error } = await supabase
+    .from("buyers")
+    .select()
+    .eq("event_id", id)
+    .select(
+      `*,
+    events (
+      price,free)`
+    );
+  return data;
 }

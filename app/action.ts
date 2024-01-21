@@ -5,6 +5,7 @@ import { addEvent} from "@/configs/db"
 import { redirect } from "next/navigation";
 import type { Buyer } from '@/configs/types/types';
 import type Event from '@/components/Event';
+import { use } from 'react';
 export async function create(formData:FormData) {
   try {
     await addEvent(formData)
@@ -33,7 +34,8 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
           },
         ],
         metadata:{
-          id_event:id
+          id_event:id,
+          name:user!
         },  
         mode:'payment',
         success_url:`${process.env.NEXT_PUBLIC_SERVER_URL!}/profile`,

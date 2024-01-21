@@ -6,6 +6,7 @@ import { Tables } from "@/configs/types/supabase";
 import { FileObject } from "@supabase/storage-js";
 import del from "@/public/assets/icons/delete.svg";
 import edit from "@/public/assets/icons/edit.svg";
+import arrow from "@/public/assets/icons/arrow.svg";
 
 const CardEvent = ({
   event,
@@ -63,9 +64,21 @@ const CardEvent = ({
           <Text size="lg" lineClamp={2} fw={500}>
             {event.title}
           </Text>
-          <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
-            {event.creater}
-          </Text>
+          <div className="flex justify-between">
+            <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
+              {event.creater}
+            </Text>
+            {organized && (
+              <>
+              <Link href={`event/${event.id}/orders`}>
+                <div className="flex gap-2">
+                  <p className="text-center text-[#624CF5]">Order Detail</p>
+                  <Image src={arrow} width={10} height={10} alt="arrow" />
+                </div>
+              </Link>
+              </>
+            )}
+          </div>
         </div>
       </Card>
     </Link>

@@ -16,25 +16,18 @@ export  async function POST(request:Request){
         status: 400,
       })    
   }
-
-   // Handle the event
    switch (event.type) {
     case 'checkout.session.completed':
       const checkoutSessionCompleted = event.data.object;
-      // Then define and call a function to handle the event checkout.session.completed
       const order:Buyer = {
         event_id:checkoutSessionCompleted.metadata?.id_event as string,
-        name:checkoutSessionCompleted.customer_details!.name as string
+        name:checkoutSessionCompleted.metadata?.name as string
       }
       const data = await buyers(order)
       return NextResponse.json({ message: 'OK', data:data})
-    // ... handle other event types
      default:
       console.log(`Unhandled event type ${event.type}`); 
   }
-
-  // Handle the event
-/*   console.log(`Unhandled event type ${event.type}`); */
   return new Response('Success!', {
     status: 200,
   })

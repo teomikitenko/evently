@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import CardEvent from "./CardEvent";
 import type { DB } from "@/configs/types/types";
 import { useEffect, useState } from "react";
@@ -28,19 +28,17 @@ const CardFields = ({
       const events = data.events!.filter((e) => e.category === category);
       filteredArray(events, filteredValue);
     } else filteredArray(data.events, filteredValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, filteredValue]);
-  return(
+  return (
     <>
-    {fillteredEvents!.length > 0 ? (
-      <Events events={fillteredEvents} images={data.storage!} />
-    ) : (
-      <NotFoundEvents />
-    )}
+      {fillteredEvents!.length > 0 ? (
+        <Events events={fillteredEvents} images={data.storage!} />
+      ) : (
+        <NotFoundEvents />
+      )}
     </>
-  )
-
-  
+  );
 };
 
 export default CardFields;

@@ -34,7 +34,6 @@ const Checkout = ({ event }: { event: Event }) => {
       event: event.event,
       user: user?.fullName,
     };
-    //delete
     await checkout(check);
   };
   return (
