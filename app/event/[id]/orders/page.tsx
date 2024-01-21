@@ -9,7 +9,7 @@ const Orders = async({params}:{params:{id:string}}) => {
         <h3 className="text-4xl font-bold">Orders</h3> 
         </div>
     <div className="px-10 py-9 ">
-      <TableOrders orders = {orders} />
+      <TableOrders orders = {orders!} />
     </div>
   </section>
   )
