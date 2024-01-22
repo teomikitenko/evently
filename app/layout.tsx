@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
-import '@mantine/dates/styles.css';
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import "@mantine/dates/styles.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { MantineProvider } from "@mantine/core";
 
@@ -29,21 +29,22 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={poppins.className}>
-          <MantineProvider
-            theme={{
-              fontFamily: poppins.className,
-            }}
-          >
-            <div className="flex flex-col h-screen  ">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-          </MantineProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={poppins.className}>
+        <MantineProvider
+          theme={{
+            fontFamily: poppins.className,
+          }}
+        >
+          <div className="flex flex-col h-screen  ">
+            {/* <Header />
+            <main className="flex-1">{children}</main>
+            <Footer /> */}
+            {children}
+          </div>
+        </MantineProvider>
+      </body>
+    </html>
+  </ClerkProvider>
   );
 }
