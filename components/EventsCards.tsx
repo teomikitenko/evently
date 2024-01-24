@@ -1,5 +1,5 @@
 "use client";
-import { Text, TextInput, Combobox, useCombobox } from "@mantine/core";
+import { Text, TextInput, Combobox, useCombobox,Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
 import CardFields from "./CardFields";
 import Image from "next/image";
@@ -16,6 +16,7 @@ export const fons = {
 };
 
 const EventsCards = ({ data }: { data: DB }) => {
+  const[opened,setOpened] = useState(false)
   const [text, setText] = useState<string>("");
   const [value, setValue] = useState("Category");
   const [categories, setCategories] = useState<string[]>([]);
@@ -108,3 +109,5 @@ const EventsCards = ({ data }: { data: DB }) => {
 };
 
 export default EventsCards;
+
+

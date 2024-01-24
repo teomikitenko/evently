@@ -146,3 +146,11 @@ export async function getOrderDetails(id: string) {
     );
   return data;
 }
+
+export async function deleteEvent(id: string) {
+  try {
+    const { error } = await supabase.from("events").delete().eq("id", id);
+  } catch (error) {
+    throw error;
+  }
+}

@@ -29,22 +29,17 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body className={poppins.className}>
-        <MantineProvider
-          theme={{
-            fontFamily: poppins.className,
-          }}
-        >
-          <div className="flex flex-col h-screen  ">
-            {/* <Header />
-            <main className="flex-1">{children}</main>
-            <Footer /> */}
-            {children}
-          </div>
-        </MantineProvider>
-      </body>
-    </html>
-  </ClerkProvider>
+      <html lang="en">
+        <body className={poppins.className}>
+          <MantineProvider
+            theme={{
+              fontFamily: poppins.className,
+            }}
+          >
+            <div className="flex flex-col h-screen  ">{children}</div>
+          </MantineProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

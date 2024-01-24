@@ -3,8 +3,6 @@ import MyTickets from "@/components/MyTickets";
 import EventOrganized from "@/components/EventOrganized";
 import { getProfileEvents } from "@/configs/db";
 
-// TODO:Order details (only event you organized)
-
 const MyProfile = async () => {
   const user = await currentUser();
   const userFullName = user?.firstName + " " + user?.lastName;

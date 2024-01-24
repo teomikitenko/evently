@@ -1,11 +1,10 @@
 'use server'
 import Stripe from 'stripe';
 import { revalidatePath } from 'next/cache'
-import { addEvent} from "@/configs/db"
+import { addEvent,deleteEvent} from "@/configs/db"
 import { redirect } from "next/navigation";
 import type { Buyer } from '@/configs/types/types';
 import type Event from '@/components/Event';
-import { use } from 'react';
 export async function create(formData:FormData) {
   try {
     await addEvent(formData)
@@ -46,4 +45,15 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
  throw error      
   }  
 
+  }
+  //fix for route / and /profile
+
+  export async function deleteEventsId(id:string){
+  try {
+    console.log({thisisID:id})
+    await deleteEvent(id)
+    revalidatePath('/','layout')  //revalidate all pages which cover layout
+  } catch (error) {
+    throw error
+  }
   }
