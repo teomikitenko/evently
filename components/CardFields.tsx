@@ -65,10 +65,10 @@ export const Events = ({
   return (
     <div className="grid gap-9 grid-cols-3">
       {events!.map((e) => {
-        const image = images.filter(
+        /*  const image = images.filter(
           (img) => img.name.split(".")[0] === e.title
-        );
-        return <CardEvent key={e.id} event={e} image={image} />;
+        ); */ 
+        return <CardEvent key={e.id} event={e}  /* image={image} */  />;
       })}
     </div>
   );

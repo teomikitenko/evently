@@ -16,7 +16,7 @@ const CardEvent = ({
   organized = false,
 }: {
   event: Tables<"events">;
-  image: FileObject[];
+  image?: FileObject[];
   organized?: boolean;
 }) => {
   const [org, setorg] = useState<boolean>(false);
@@ -45,7 +45,7 @@ const CardEvent = ({
             <div className="h-[222px]">
               <Image
                 className="object-cover w-full h-full"
-                src={`${image[0].name}`}
+                src={`${image![0].name}`}
                 loader={myLoader}
                 width={1000}
                 height={360}
