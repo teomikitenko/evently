@@ -1,8 +1,8 @@
-"use client"
 import React from "react";
 import CardEvent from "./CardEvent";
 import { Tickets } from "@/configs/types/types";
 import { FileObject } from "@supabase/storage-js";
+import { NotFindContent } from "./NotFindContent";
 import Link from "next/link";
 
 const MyTickets = ({
@@ -37,27 +37,13 @@ const MyTickets = ({
           })}
         </div>
       ) : (
-        <NotFindTickets />
+        <NotFindContent
+          title="No event tickets purchased yet"
+          message="No worries - plenty of exciting events to explore!"
+        />
       )}
     </section>
   );
 };
 
 export default MyTickets;
-
-const NotFindTickets = () => {
-  return (
-    <div className="py-6 px-10">
-      <div className="dotted-bg flex justify-center py-12">
-        <div>
-          <h3 className="text-2xl font-bold leading-[3rem]">
-            No event tickets purchased yet
-          </h3>
-          <p className="text-center text-sm">
-            No worries - plenty of exciting events to explore!
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};

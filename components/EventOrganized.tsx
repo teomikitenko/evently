@@ -1,7 +1,8 @@
-import Link from 'next/link'
+import Link from "next/link";
 import { Tables } from "@/configs/types/supabase";
 import { FileObject } from "@supabase/storage-js";
 import CardEvent from "./CardEvent";
+import { NotFindContent } from "./NotFindContent";
 const EventOrganized = ({
   data,
   images,
@@ -14,13 +15,13 @@ const EventOrganized = ({
       <div className="dotted-bg w-full">
         <div className="flex justify-between py-14 px-10">
           <p className="text-4xl font-bold">Events Organized</p>
-          <Link href={'/create'}>
-          <button
-            className="bg-violet-600 rounded-full py-3 px-6 hover:bg-violet-500"
-            type="button"
-          >
-            <p className="text-white">Create New Event</p>
-          </button>
+          <Link href={"/create"}>
+            <button
+              className="bg-violet-600 rounded-full py-3 px-6 hover:bg-violet-500"
+              type="button"
+            >
+              <p className="text-white">Create New Event</p>
+            </button>
           </Link>
         </div>
       </div>
@@ -34,25 +35,13 @@ const EventOrganized = ({
           })}
         </div>
       ) : (
-        <NotFindOrganized />
+        <NotFindContent
+          title="No events have been created yet"
+          message="Go create some now"
+        />
       )}
     </section>
   );
 };
 
 export default EventOrganized;
-
-const NotFindOrganized = () => {
-  return (
-    <div className="py-6 px-10">
-      <div className="dotted-bg flex justify-center py-12">
-        <div>
-          <h3 className="text-2xl font-bold leading-[3rem]">
-            No events have been created yet
-          </h3>
-          <p className="text-center text-sm">Go create some now</p>
-        </div>
-      </div>
-    </div>
-  );
-};

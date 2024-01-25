@@ -1,5 +1,6 @@
 import type { DB } from "@/configs/types/types";
 import { Events } from "./CardFields";
+import { NotFindContent } from "./NotFindContent";
 
 const Related = ({ related }: { related: DB }) => {
   return (
@@ -7,8 +8,11 @@ const Related = ({ related }: { related: DB }) => {
       <div className="mb-10">
         <p className="font-bold text-4xl">Related Events</p>
       </div>
-     {related!.events!.length>0&&
-     <Events events={related.events} images={related.storage!} />} 
+      {related!.events!.length > 0 ? (
+        <Events events={related.events} images={related.storage!} />
+      ) : (
+        <NotFindContent title="No Events Found" message="Come back later" />
+      )}
     </section>
   );
 };

@@ -109,8 +109,7 @@ export async function getProfileEvents(name: string) {
     events (
      *
     )
-  `
-      )
+  ` )
       .returns<Tickets[]>();
     const { data: organised } = await supabase
       .from("events")

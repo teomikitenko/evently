@@ -29,7 +29,9 @@ const HeroSection = () => {
             radius="xl"
             px={27}
           >
+            <a href="#events">
             <Text size="sm">Explore now</Text>
+            </a>
           </Button>
         </div>
         <div className="w-1/2 flex justify-center ">

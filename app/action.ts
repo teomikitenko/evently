@@ -46,13 +46,10 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
   }  
 
   }
-  //fix for route / and /profile
-
   export async function deleteEventsId(id:string){
   try {
-    console.log({thisisID:id})
     await deleteEvent(id)
-    revalidatePath('/','layout')  //revalidate all pages which cover layout
+    revalidatePath('/','layout')
   } catch (error) {
     throw error
   }
