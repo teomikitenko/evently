@@ -33,7 +33,6 @@ const CardEvent = ({
 
   return (
     <div className="relative group">
-      <Link href={`/event/${event.id}`}>
         <Card
           className="hover:shadow-lg"
           shadow="sm"
@@ -42,6 +41,7 @@ const CardEvent = ({
           withBorder
         >
           <Card.Section>
+            <Link href={`/event/${event.id}`}>
             <div className="h-[222px]">
               <Image
                 className="object-cover w-full h-full"
@@ -52,6 +52,7 @@ const CardEvent = ({
                 alt="Norway"
               />
             </div>
+            </Link>
           </Card.Section>
           <Group mt="md" mb="xs">
             <span className="bg-green-100 px-4 py-1 w-min rounded-full">
@@ -69,33 +70,32 @@ const CardEvent = ({
             <Text size="sm" fw={600} c="dimmed">
               {event.startDate?.split(" ").slice(0, 5).join(" ")}
             </Text>
+            <Link href={`/event/${event.id}`}>
             <Text size="lg" lineClamp={2} fw={500}>
               {event.title}
             </Text>
+            </Link>
             <div className="flex justify-between">
               <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
                 {event.creater}
               </Text>
-              {org && (
+               {org && (
                 <Link href={`event/${event.id}/orders`}>
                   <div className="flex gap-2">
                     <p className="text-center text-[#624CF5]">Order Detail</p>
                     <Image src={arrow} width={10} height={10} alt="arrow" />
                   </div>
                 </Link>
-              )}
+              )} 
             </div>
           </div>
         </Card>
-      </Link>
       {organized && <EditBadge eventId={event.id} />}
     </div>
   );
 };
 
 export default CardEvent;
-
-//fix delete event dont work
 
 const EditBadge = ({ eventId }: { eventId: string }) => {
   const [opened, setOpened] = useState(false);
