@@ -11,6 +11,7 @@ const MyTickets = ({
   data: Tickets[];
   images: FileObject[] | null;
 }) => {
+  console.log({thisData:data})
   return (
     <section>
       <div className="dotted-bg w-full">
