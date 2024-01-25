@@ -7,7 +7,8 @@ const Related = ({ related }: { related: DB }) => {
       <div className="mb-10">
         <p className="font-bold text-4xl">Related Events</p>
       </div>
-      <Events events={related.events} images={related.storage!} />
+     {related!.events!.length>0&&
+     <Events events={related.events} images={related.storage!} />} 
     </section>
   );
 };
