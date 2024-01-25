@@ -9,7 +9,7 @@ const MyProfile = async () => {
   const eventsData = await getProfileEvents(userFullName);
   return (
     <div className="flex flex-col">
-       <MyTickets data={eventsData.my_ticket} images={eventsData.images} />
+       <MyTickets data={eventsData.my_ticket} images={eventsData.images} name={user} />
        <EventOrganized data={eventsData.organised} images={eventsData.images} /> 
     </div>
   );
