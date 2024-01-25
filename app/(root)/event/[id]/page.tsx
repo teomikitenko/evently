@@ -14,9 +14,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
       <div className="dotted-bg w-full h-full">
         <Event event={event} />
       </div>
-      {relatedEvents!.events!.length>0&&(
         <Related related={relatedEvents} />
-      )}  
     </section>
   );
 };

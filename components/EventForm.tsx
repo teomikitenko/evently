@@ -490,6 +490,7 @@ const ModalCategory = ({
   useEffect(()=>{
     if(sended){
       setCategories(val => [...val,value])
+      setSended(false)
     }
   },[sended])
   return (

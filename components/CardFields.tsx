@@ -68,7 +68,7 @@ export const Events = ({
           const image = images.filter(
           (img) => img.name.split(".")[0] === e.title
         );  
-        return image.length>0&&<CardEvent key={e.id} event={e}   image={image}   />;
+        return <CardEvent key={e.id} event={e}   image={image}   />;
       })}
     </div>
   );
