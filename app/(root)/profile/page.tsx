@@ -5,11 +5,11 @@ import { getProfileEvents } from "@/configs/db";
 
 const MyProfile = async () => {
   const user = await currentUser();
-  const userFullName = user?.firstName + " " + user?.lastName;
-  const eventsData = await getProfileEvents(userFullName);
+  const userFullName =user?.lastName ?  user?.firstName + " " + user?.lastName : user?.firstName
+  const eventsData = await getProfileEvents(userFullName as string);
   return (
     <div className="flex flex-col">
-       <MyTickets data={eventsData.my_ticket} images={eventsData.images} name={userFullName} />
+       <MyTickets data={eventsData.my_ticket} images={eventsData.images} />
        <EventOrganized data={eventsData.organised} images={eventsData.images} /> 
     </div>
   );

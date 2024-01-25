@@ -8,13 +8,10 @@ import Link from "next/link";
 const MyTickets = ({
   data,
   images,
-  name
 }: {
   data: Tickets[];
   images: FileObject[] | null;
-  name:any
 }) => {
-  console.log({thisData:data,thisName:name})
   return (
     <section>
       <div className="dotted-bg w-full">
