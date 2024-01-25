@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import CardEvent from "./CardEvent";
 import { Tickets } from "@/configs/types/types";
