@@ -33,15 +33,15 @@ const CardEvent = ({
 
   return (
     <div className="relative group">
-        <Card
-          className="hover:shadow-lg"
-          shadow="sm"
-          padding="lg"
-          radius="md"
-          withBorder
-        >
-          <Card.Section>
-            <Link href={`/event/${event.id}`}>
+      <Card
+        className="hover:shadow-lg"
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+      >
+        <Card.Section>
+          <Link href={`/event/${event.id}`}>
             <div className="h-[222px]">
               <Image
                 className="object-cover w-full h-full"
@@ -52,44 +52,44 @@ const CardEvent = ({
                 alt="Norway"
               />
             </div>
-            </Link>
-          </Card.Section>
-          <Group mt="md" mb="xs">
-            <span className="bg-green-100 px-4 py-1 w-min rounded-full">
-              <p className="text-sm font-semibold ">
-                {event.free ? "Free" : `${event.price}$`}
-              </p>
-            </span>
-            <span className="bg-slate-100 px-4 py-1 w-min rounded-full">
-              <p className="text-sm font-semibold text-slate-500 text-nowrap">
-                {event.category}
-              </p>
-            </span>
-          </Group>
-          <div className="flex flex-col gap-4">
-            <Text size="sm" fw={600} c="dimmed">
-              {event.startDate?.split(" ").slice(0, 5).join(" ")}
-            </Text>
-            <Link href={`/event/${event.id}`}>
+          </Link>
+        </Card.Section>
+        <Group mt="md" mb="xs">
+          <span className="bg-green-100 px-4 py-1 w-min rounded-full">
+            <p className="text-sm font-semibold ">
+              {event.free ? "Free" : `${event.price}$`}
+            </p>
+          </span>
+          <span className="bg-slate-100 px-4 py-1 w-min rounded-full">
+            <p className="text-sm font-semibold text-slate-500 text-nowrap">
+              {event.category}
+            </p>
+          </span>
+        </Group>
+        <div className="flex flex-col gap-4">
+          <Text size="sm" fw={600} c="dimmed">
+            {event.startDate?.split(" ").slice(0, 5).join(" ")}
+          </Text>
+          <Link href={`/event/${event.id}`}>
             <Text size="lg" lineClamp={2} fw={500}>
               {event.title}
             </Text>
-            </Link>
-            <div className="flex justify-between">
-              <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
-                {event.creater}
-              </Text>
-               {org && (
-                <Link href={`event/${event.id}/orders`}>
-                  <div className="flex gap-2">
-                    <p className="text-center text-[#624CF5]">Order Detail</p>
-                    <Image src={arrow} width={10} height={10} alt="arrow" />
-                  </div>
-                </Link>
-              )} 
-            </div>
+          </Link>
+          <div className="flex justify-between">
+            <Text size="md" fw={500} c={darken("rgb(261,261,261)", 0.6)}>
+              {event.creater}
+            </Text>
+            {org && (
+              <Link href={`event/${event.id}/orders`}>
+                <div className="flex gap-2">
+                  <p className="text-center text-[#624CF5]">Order Detail</p>
+                  <Image src={arrow} width={10} height={10} alt="arrow" />
+                </div>
+              </Link>
+            )}
           </div>
-        </Card>
+        </div>
+      </Card>
       {organized && <EditBadge eventId={event.id} />}
     </div>
   );
@@ -101,9 +101,11 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
   const [opened, setOpened] = useState(false);
   return (
     <div className="animation-badge group-hover:opacity-100  flex flex-col py-2 px-2 gap-3 rounded-lg">
-      <button>
-        <Image src={edit} width={20} height={20} alt="edit" />
-      </button>
+      <Link href={`event/${eventId}/edit`}>
+        <button>
+          <Image src={edit} width={20} height={20} alt="edit" />
+        </button>
+      </Link>
       <button
         onClick={() => {
           setOpened(true);
@@ -122,12 +124,13 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
           backgroundOpacity: 0.2,
           blur: 4,
         }}
-      >  
-
-        <form  action={async() =>{
-         await deleteEventsId(eventId)
-         setTimeout(()=>setOpened(false),1000) 
-        }} >
+      >
+        <form
+          action={async () => {
+            await deleteEventsId(eventId);
+            setTimeout(() => setOpened(false), 1000);
+          }}
+        >
           <div className="flex flex-col gap-1">
             <p className="font-bold text-lg">
               Are you sure you want to delete?
@@ -138,7 +141,7 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
             <div className="flex gap-2 mt-3 justify-end">
               <button
                 type="button"
-                onClick={()=>setOpened(false)}
+                onClick={() => setOpened(false)}
                 className=" rounded-lg text-black text-sm px-3  py-2 border"
               >
                 <p>Cancel</p>
@@ -146,7 +149,8 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
               <button
                 className="bg-violet-600 rounded-lg text-sm  text-white hover:bg-violet-500 px-3  py-2 border "
                 type="submit"
-              ><p>Delete</p>
+              >
+                <p>Delete</p>
               </button>
             </div>
           </div>
@@ -155,4 +159,3 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
     </div>
   );
 };
-

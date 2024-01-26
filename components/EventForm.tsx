@@ -26,6 +26,8 @@ import link from "@/public/assets/icons/link.svg";
 import { fons } from "./EventsCards";
 import { DateTimePicker } from "@mantine/dates";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import type { Event } from "@/configs/types/types";
+import { FileObject } from "@supabase/storage-js";
 
 const checkbox = {
   input: {
@@ -81,14 +83,16 @@ export type Values = {
   url: string;
 };
 
-const EventForm = () => {
+const EventForm = ({
+  edit = false,
+  eventEdit,
+}: {
+  edit?: boolean;
+  eventEdit?: Event;
+}) => {
   const [file, setFile] = useState<FileWithPath[] | undefined>();
   const [free, setFree] = useState(false);
-  const [categories, setCategories] = useState([
-    "Next Js",
-    "React Js",
-    "Tech",
-  ]);
+  const [categories, setCategories] = useState(["Next Js", "React Js", "Tech"]);
   const [openModal, setOpenModal] = useState(false);
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
@@ -96,15 +100,15 @@ const EventForm = () => {
 
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
-      title: "",
-      category: "Category",
-      description: "",
+      title: edit?eventEdit!.event!.title! as string:"",
+      category: edit?eventEdit?.event.category as string:"Category",
+      description: edit?eventEdit?.event.description as string:"",
       image: undefined,
-      location: "",
-      startDate: new Date(new Date().setDate(new Date().getDate() - 7)),
-      endDate: new Date(),
-      price: "",
-      url: "",
+      location: edit?eventEdit?.event.location as string:"",
+      startDate:/*  edit?eventEdit?.event.startDate! : */ new Date(new Date().setDate(new Date().getDate() - 7)),
+      endDate:/*  edit?eventEdit?.event.endDate! : */new Date(),   //fix date type
+      price: edit?eventEdit?.event.price as string:"",
+      url: edit?eventEdit?.event.url as string:"",
     },
   });
   useEffect(() => {
@@ -112,6 +116,8 @@ const EventForm = () => {
       setFile(undefined);
     }
   }, [formState.isSubmitSuccessful]);
+
+
 
   const onSubmit: SubmitHandler<Values> = async (data) => {
     const form = new FormData();
@@ -141,7 +147,7 @@ const EventForm = () => {
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <TextInput
                 classNames={{ input: "poppins" }}
-                value={value}
+                value={ value}
                 size="lg"
                 styles={fons}
                 onChange={onChange}
@@ -253,7 +259,13 @@ const EventForm = () => {
                   setFile(file);
                 }}
               >
-                {file ? <Preview file={file} /> : <ImageContainer />}
+                {file ? (
+                  <Preview file={file} />
+                ) : edit ? (
+                  <Preview image={eventEdit?.storage as FileObject[]} />
+                ) : (
+                  <ImageContainer />
+                )}
               </Dropzone>
             )}
           />
@@ -434,7 +446,7 @@ const EventForm = () => {
           className="w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
           type="submit"
         >
-          <p className="text-white">Create Event</p>
+          <p className="text-white">{edit ? "Edit" : "Create Event"}</p>
         </button>
       </form>
     </>
@@ -443,18 +455,40 @@ const EventForm = () => {
 
 export default EventForm;
 
-const Preview = ({ file }: { file: FileWithPath[] }) => {
-  const imageUrl = URL.createObjectURL(file[0]);
+const Preview = ({
+  file,
+  image,
+}: {
+  file?: FileWithPath[];
+  image?: FileObject[];
+}) => {
+  const imageUrl = file && URL.createObjectURL(file[0]);
+
   return (
     <div className="w-full h-[263px]">
-      <Image
-        className=" w-full h-full object-cover rounded-2xl "
-        width={0}
-        height={0}
-        src={imageUrl}
-        onLoad={() => URL.revokeObjectURL(imageUrl)}
-        alt="preview"
-      />
+      {image ? (
+        <Image
+          loader={({ src, width, quality }) => {
+            return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
+              quality || 75
+            }`;
+          }}
+          className=" w-full h-full object-cover rounded-2xl "
+          width={0}
+          height={0}
+          src={`${image[0].name}`}
+          alt="edit-preview"
+        />
+      ) : (
+        <Image
+          className=" w-full h-full object-cover rounded-2xl "
+          width={0}
+          height={0}
+          src={imageUrl!}
+          onLoad={() => URL.revokeObjectURL(imageUrl!)}
+          alt="preview"
+        />
+      )}
     </div>
   );
 };
@@ -480,19 +514,19 @@ const ModalCategory = ({
   opened,
   setCategories,
 }: {
-  setOpened: Dispatch<SetStateAction<boolean>>,
-  opened:boolean,
-  setCategories:Dispatch<SetStateAction<string[]>>
+  setOpened: Dispatch<SetStateAction<boolean>>;
+  opened: boolean;
+  setCategories: Dispatch<SetStateAction<string[]>>;
 }) => {
-  const [value, setValue] = useState<string>('');
-  const [sended,setSended] = useState(false)
-  
-  useEffect(()=>{
-    if(sended){
-      setCategories(val => [...val,value])
-      setSended(false)
+  const [value, setValue] = useState<string>("");
+  const [sended, setSended] = useState(false);
+
+  useEffect(() => {
+    if (sended) {
+      setCategories((val) => [...val, value]);
+      setSended(false);
     }
-  },[sended])
+  }, [sended]);
   return (
     <Modal
       size="40%"
@@ -505,37 +539,35 @@ const ModalCategory = ({
         backgroundOpacity: 0.2,
         blur: 4,
       }}
-      
     >
       <div className="flex flex-col gap-2">
-            <p className="font-bold text-lg">
-            New Category
-            </p>
-           <TextInput
-           styles={fons2}
-           radius='lg'
-           size="md"
-           placeholder="Category Name"
-           onChange={e=>setValue(e.currentTarget.value)}
-           />
-            <div className="flex gap-2 mt-3 justify-end">
-              <button
-                type="button"
-                onClick={()=>setOpened(false)}
-                className=" rounded-lg text-black text-sm px-3  py-2 border"
-              >
-                <p>Cancel</p>
-              </button>
-              <button
-                className="bg-violet-600 rounded-lg text-sm  text-white hover:bg-violet-500 px-3  py-2 border "
-                onClick={()=>{
-                  setSended(true)
-                  setOpened(false)
-                }}
-              ><p>Add</p>
-              </button>
-            </div>
-          </div>
+        <p className="font-bold text-lg">New Category</p>
+        <TextInput
+          styles={fons2}
+          radius="lg"
+          size="md"
+          placeholder="Category Name"
+          onChange={(e) => setValue(e.currentTarget.value)}
+        />
+        <div className="flex gap-2 mt-3 justify-end">
+          <button
+            type="button"
+            onClick={() => setOpened(false)}
+            className=" rounded-lg text-black text-sm px-3  py-2 border"
+          >
+            <p>Cancel</p>
+          </button>
+          <button
+            className="bg-violet-600 rounded-lg text-sm  text-white hover:bg-violet-500 px-3  py-2 border "
+            onClick={() => {
+              setSended(true);
+              setOpened(false);
+            }}
+          >
+            <p>Add</p>
+          </button>
+        </div>
+      </div>
     </Modal>
   );
 };
