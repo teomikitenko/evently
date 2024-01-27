@@ -10,6 +10,8 @@ import arrow from "@/public/assets/icons/arrow.svg";
 import { useEffect, useState } from "react";
 import { deleteEventsId } from "@/app/action";
 
+export const dynamic = "force-dynamic";
+
 const CardEvent = ({
   event,
   image,
@@ -43,16 +45,14 @@ const CardEvent = ({
         <Card.Section>
           <Link href={`/event/${event.id}`}>
             <div className="h-[222px]">
-              {image!.length > 0 && (
-                <Image
-                  className="object-cover w-full h-full"
-                  src={`${image![0].name}`}
-                  loader={myLoader}
-                  width={1000}
-                  height={360}
-                  alt="Norway"
-                />
-              )}
+              <Image
+                className="object-cover w-full h-full"
+                src={`${image![0].name}`}
+                loader={myLoader}
+                width={1000}
+                height={360}
+                alt="Norway"
+              />
             </div>
           </Link>
         </Card.Section>
