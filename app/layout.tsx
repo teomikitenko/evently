@@ -13,9 +13,6 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
 });
-const theme = {
-  fontFamily: poppins.className,
-};
 
 export const metadata: Metadata = {
   title: "Evently",
