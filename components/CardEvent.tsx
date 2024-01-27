@@ -21,6 +21,7 @@ const CardEvent = ({
   organized?: boolean;
 }) => {
   const [org, setorg] = useState<boolean>(false);
+  const[img,setImg] = useState<FileObject[]>()
 
   const myLoader = ({ src, width, quality }: ImageLoaderProps) => {
     return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
@@ -32,6 +33,7 @@ const CardEvent = ({
       setorg(true);
     }
   }, [organized]);
+  useEffect(()=>setImg(image),[image])
   return (
     <div className="relative group">
       <Card
