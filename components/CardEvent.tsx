@@ -31,7 +31,7 @@ const CardEvent = ({
       setorg(true);
     }
   }, [organized]);
-console.log(image![0].name)
+console.log(image)
   return (
     <div className="relative group">
       <Card
