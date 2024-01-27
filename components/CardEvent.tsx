@@ -10,7 +10,6 @@ import arrow from "@/public/assets/icons/arrow.svg";
 import { useEffect, useState } from "react";
 import { deleteEventsId } from "@/app/action";
 
-
 const CardEvent = ({
   event,
   image,
@@ -21,7 +20,6 @@ const CardEvent = ({
   organized?: boolean;
 }) => {
   const [org, setorg] = useState<boolean>(false);
-  const[img,setImg] = useState<FileObject[]>()
 
   const myLoader = ({ src, width, quality }: ImageLoaderProps) => {
     return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
@@ -33,7 +31,7 @@ const CardEvent = ({
       setorg(true);
     }
   }, [organized]);
-  useEffect(()=>setImg(image),[image])
+  console.log(image);
   return (
     <div className="relative group">
       <Card
@@ -46,14 +44,16 @@ const CardEvent = ({
         <Card.Section>
           <Link href={`/event/${event.id}`}>
             <div className="h-[222px]">
-              <Image
-                className="object-cover w-full h-full"
-                src={`${image![0].name}`}
-                loader={myLoader}
-                width={1000}
-                height={360}
-                alt="Norway"
-              />
+              {image && (
+                <Image
+                  className="object-cover w-full h-full"
+                  src={`${image![0].name}`}
+                  loader={myLoader}
+                  width={1000}
+                  height={360}
+                  alt="Norway"
+                />
+              )}
             </div>
           </Link>
         </Card.Section>
