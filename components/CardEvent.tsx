@@ -10,7 +10,6 @@ import arrow from "@/public/assets/icons/arrow.svg";
 import { useEffect, useState } from "react";
 import { deleteEventsId } from "@/app/action";
 
-export const dynamic = "force-dynamic";
 
 const CardEvent = ({
   event,
