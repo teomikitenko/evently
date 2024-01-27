@@ -13,7 +13,7 @@ import {
   NumberInputHandlers,
   Modal,
 } from "@mantine/core";
-import { create } from "@/app/action";
+import { create, update } from "@/app/action";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { IconCaretUpFilled } from "@tabler/icons-react";
@@ -28,7 +28,8 @@ import { DateTimePicker } from "@mantine/dates";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import type { Event } from "@/configs/types/types";
 import { FileObject } from "@supabase/storage-js";
-
+/* import { deleteImage } from "@/configs/db";
+ */
 const checkbox = {
   input: {
     border: "2px solid var(--mantine-color-violet-filled)",
@@ -77,8 +78,8 @@ export type Values = {
   description: string;
   image: FileWithPath[];
   location: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   price: string;
   url: string;
 };
@@ -91,24 +92,28 @@ const EventForm = ({
   eventEdit?: Event;
 }) => {
   const [file, setFile] = useState<FileWithPath[] | undefined>();
+  const [editableImage, setEditableImage] = useState<FileObject | undefined>();
   const [free, setFree] = useState(false);
   const [categories, setCategories] = useState(["Next Js", "React Js", "Tech"]);
   const [openModal, setOpenModal] = useState(false);
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
   const { user } = useUser();
-
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
-      title: edit?eventEdit!.event!.title! as string:"",
-      category: edit?eventEdit?.event.category as string:"Category",
-      description: edit?eventEdit?.event.description as string:"",
+      title: edit ? (eventEdit!.event!.title! as string) : "",
+      category: edit ? (eventEdit?.event.category as string) : "Category",
+      description: edit ? (eventEdit?.event.description as string) : "",
       image: undefined,
-      location: edit?eventEdit?.event.location as string:"",
-      startDate:/*  edit?eventEdit?.event.startDate! : */ new Date(new Date().setDate(new Date().getDate() - 7)),
-      endDate:/*  edit?eventEdit?.event.endDate! : */new Date(),   //fix date type
-      price: edit?eventEdit?.event.price as string:"",
-      url: edit?eventEdit?.event.url as string:"",
+      location: edit ? (eventEdit?.event.location as string) : "",
+      startDate: edit
+        ? new Date(Date.parse(eventEdit?.event.startDate!))
+        : new Date(new Date().setDate(new Date().getDate() - 7)),
+      endDate: edit
+        ? new Date(Date.parse(eventEdit?.event.endDate!))
+        : new Date(),
+      price: edit ? (eventEdit?.event.price as string) : "",
+      url: edit ? (eventEdit?.event.url as string) : "",
     },
   });
   useEffect(() => {
@@ -116,9 +121,11 @@ const EventForm = ({
       setFile(undefined);
     }
   }, [formState.isSubmitSuccessful]);
-
-
-
+  useEffect(() => {
+    if (edit) {
+      setEditableImage(eventEdit!.storage![0]);
+    }
+  }, [edit]);
   const onSubmit: SubmitHandler<Values> = async (data) => {
     const form = new FormData();
     Object.entries(data).map((e) => {
@@ -128,8 +135,18 @@ const EventForm = ({
     });
     form.append("free", JSON.stringify(free));
     form.append("creater", user?.fullName!);
-    reset();
-    await create(form);
+    if (edit) {
+      const editableData = {
+        id: eventEdit?.event.id!,
+        form: form,
+        prevImage: editableImage,
+        prevImageName: eventEdit!.storage![0].name,
+      };
+      await update(editableData);
+    } else {
+      await create(form);
+      reset();
+    }
   };
 
   return (
@@ -147,7 +164,7 @@ const EventForm = ({
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <TextInput
                 classNames={{ input: "poppins" }}
-                value={ value}
+                value={value}
                 size="lg"
                 styles={fons}
                 onChange={onChange}
@@ -257,12 +274,13 @@ const EventForm = ({
                 onDrop={(file) => {
                   onChange(file);
                   setFile(file);
+                  setEditableImage(undefined);
                 }}
               >
                 {file ? (
                   <Preview file={file} />
-                ) : edit ? (
-                  <Preview image={eventEdit?.storage as FileObject[]} />
+                ) : editableImage ? (
+                  <Preview prevImage={eventEdit?.storage as FileObject[]} />
                 ) : (
                   <ImageContainer />
                 )}
@@ -302,11 +320,8 @@ const EventForm = ({
                 className="w-[50%]"
                 radius="lg"
                 variant="filled"
-                value={value}
+                value={value as Date}
                 valueFormat="ddd, MMM D, YYYY h:mm A"
-                defaultValue={
-                  new Date(new Date().setDate(new Date().getDate() - 7))
-                }
                 onChange={onChange}
                 onBlur={onBlur}
                 styles={picker}
@@ -338,10 +353,9 @@ const EventForm = ({
                 className="w-[50%]"
                 clearable
                 radius="lg"
-                value={value}
+                value={value as Date}
                 variant="filled"
                 valueFormat="ddd, MMM D, YYYY h:mm A"
-                defaultValue={new Date()}
                 onChange={onChange}
                 onBlur={onBlur}
                 styles={picker}
@@ -457,16 +471,16 @@ export default EventForm;
 
 const Preview = ({
   file,
-  image,
+  prevImage,
 }: {
   file?: FileWithPath[];
-  image?: FileObject[];
+  prevImage?: FileObject[];
 }) => {
   const imageUrl = file && URL.createObjectURL(file[0]);
 
   return (
     <div className="w-full h-[263px]">
-      {image ? (
+      {prevImage ? (
         <Image
           loader={({ src, width, quality }) => {
             return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
@@ -476,7 +490,7 @@ const Preview = ({
           className=" w-full h-full object-cover rounded-2xl "
           width={0}
           height={0}
-          src={`${image[0].name}`}
+          src={`${prevImage[0].name}`}
           alt="edit-preview"
         />
       ) : (

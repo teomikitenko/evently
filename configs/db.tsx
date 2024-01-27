@@ -2,11 +2,43 @@ import { createClient } from "@supabase/supabase-js";
 import { Database } from "./types/supabase";
 import type { Buyer } from "./types/types";
 import { Tickets } from "./types/types";
+import { FileObject } from "@supabase/storage-js";
 
 export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
 );
+
+export const updateEvent = async (
+  id: string,
+  form: FormData,
+  prevImage?: FileObject,
+  prevImageName?: string
+) => {
+  const obj = Object.fromEntries(form.entries());
+  const { image, ...rest } = obj;
+  rest.free = JSON.parse(rest.free as string);
+  if (prevImage) {
+    await supabase.storage
+      .from("evently")
+      .move(
+        `img/${prevImage.name}`,
+        `img/${rest.title}.${prevImage.name.split(".")[1]}`
+      );
+    await supabase.from("events").update(rest).eq("id", id);
+  } else {
+    await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
+    const img = form.get("image") as File;
+    const type = img.type.split("/")[1];
+    await supabase.from("events").update(rest).eq("id", id);
+    await supabase.storage
+      .from("evently")
+      .upload(`img/${rest.title}.${type}`, img, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+  }
+};
 
 export const getEventsByCategory = async (category: string, exepId: string) => {
   try {
@@ -109,7 +141,8 @@ export async function getProfileEvents(name: string) {
     events (
      *
     )
-  ` )
+  `
+      )
       .returns<Tickets[]>();
     const { data: organised } = await supabase
       .from("events")
@@ -149,6 +182,10 @@ export async function getOrderDetails(id: string) {
 export async function deleteEvent(id: string) {
   try {
     const { error } = await supabase.from("events").delete().eq("id", id);
+    /*       await supabase
+  .storage
+  .from('evently')        //add name property
+  .remove([name])  */
   } catch (error) {
     throw error;
   }

@@ -1,10 +1,13 @@
 'use server'
 import Stripe from 'stripe';
 import { revalidatePath } from 'next/cache'
-import { addEvent,deleteEvent} from "@/configs/db"
+import { addEvent,deleteEvent,updateEvent} from "@/configs/db"
 import { redirect } from "next/navigation";
 import type { Buyer } from '@/configs/types/types';
 import type Event from '@/components/Event';
+import { FileObject } from "@supabase/storage-js";
+
+
 export async function create(formData:FormData) {
   try {
     await addEvent(formData)
@@ -13,6 +16,17 @@ export async function create(formData:FormData) {
     throw error
   }
 }
+
+export async function update({id,form,prevImage,prevImageName}:{id:string,form:FormData,prevImage?:FileObject,prevImageName:string}) {
+  try {
+    await updateEvent(id,form,prevImage,prevImageName)
+    revalidatePath('/')  
+  } catch (error) {
+    throw error
+  }
+}
+
+
 export async function checkout({event,user}:{event:Event['event'],user:Buyer['name']}){
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
 

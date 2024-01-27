@@ -2,6 +2,8 @@ import React from 'react'
 import { getEvent } from '@/configs/db'
 import EventForm from '@/components/EventForm'
 
+export const dynamic = 'force-dynamic'
+
 const Edit = async({params}:{params:{id:string}}) => {
   const event = await getEvent(params.id)
   return (
