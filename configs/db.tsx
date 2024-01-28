@@ -3,6 +3,7 @@ import { Database } from "./types/supabase";
 import type { Buyer } from "./types/types";
 import { Tickets } from "./types/types";
 import { FileObject } from "@supabase/storage-js";
+import { permanentRedirect, redirect } from "next/navigation";
 
 export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -19,24 +20,43 @@ export const updateEvent = async (
   const { image, ...rest } = obj;
   rest.free = JSON.parse(rest.free as string);
   if (prevImage) {
-    await supabase.storage
-      .from("evently")
-      .move(
-        `img/${prevImage.name}`,
-        `img/${rest.title}.${prevImage.name.split(".")[1]}`
-      );
-    await supabase.from("events").update(rest).eq("id", id);
+    try {
+      Promise.all([
+        supabase.storage
+          .from("evently")
+          .move(
+            `img/${prevImage.name}`,
+            `img/${rest.title}.${prevImage.name.split(".")[1]}`
+          ),
+        supabase.from("events").update(rest).eq("id", id),
+      ]).then(res=>console.log('success update'))
+    } catch (error) {
+      throw error;
+    }
   } else {
-    await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
     const img = form.get("image") as File;
     const type = img.type.split("/")[1];
-    await supabase.from("events").update(rest).eq("id", id);
-    await supabase.storage
+try {
+await supabase.storage.from("evently").remove([`img/${prevImageName}`]) 
+   Promise.all([
+    supabase.from("events").update(rest).eq("id", id), 
+    supabase.storage
       .from("evently")
       .upload(`img/${rest.title}.${type}`, img, {
         cacheControl: "3600",
         upsert: false,
-      });
+      }),
+  ])
+  const {data}  = await supabase.storage.from("evently").list("img", {
+    limit: 100,
+    offset: 0,
+    sortBy: { column: "name", order: "asc" },
+    search: rest.title as string,
+  })
+  console.log(data)
+} catch (error) {
+  throw error
+}  
   }
 };
 
@@ -74,6 +94,7 @@ export async function getEvent(id: string) {
       sortBy: { column: "name", order: "asc" },
       search: event![0].title!,
     });
+
     return {
       event: event![0],
       storage: image,
@@ -89,13 +110,14 @@ export async function addEvent(form: FormData) {
   const img = form.get("image") as File;
   const type = img.type.split("/")[1];
   try {
-    await supabase.from("events").insert([rest]).select();
+    const { data } = await supabase.from("events").insert([rest]).select();
     await supabase.storage
       .from("evently")
       .upload(`img/${rest.title}.${type}`, img, {
         cacheControl: "3600",
         upsert: false,
       });
+    redirect(`event/${data![0].id}`);
   } catch (error) {
     throw error;
   }

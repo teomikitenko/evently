@@ -18,13 +18,10 @@ export async function create(formData:FormData) {
 }
 
 export async function update({id,form,prevImage,prevImageName}:{id:string,form:FormData,prevImage?:FileObject,prevImageName:string}) {
-  try {
     await updateEvent(id,form,prevImage,prevImageName)
-    revalidatePath('/')  
-  } catch (error) {
-    throw error
+    revalidatePath('/')   
+    /* redirect(`/event/${id}`) */
   }
-}
 
 
 export async function checkout({event,user}:{event:Event['event'],user:Buyer['name']}){

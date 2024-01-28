@@ -6,8 +6,16 @@ import { useUser } from "@clerk/nextjs";
 import location from "@/public/assets/icons/location.svg";
 import type { Event } from "@/configs/types/types";
 import Checkout from "./Checkout";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 const Event = ({ event }: { event: Event }) => {
   const { user } = useUser();
+  const router = useRouter()
+  useEffect(() => {
+    window.scrollTo(0, 0);
+   setTimeout(()=>router.refresh(),500) 
+  }, []);
   return (
     <div className="flex w-full gap-6 h-full pl-1 pr-3">
       <div className="w-[62%] h-full ">

@@ -31,7 +31,6 @@ const CardEvent = ({
       setorg(true);
     }
   }, [organized]);
-  console.log(image);
   return (
     <div className="relative group">
       <Card

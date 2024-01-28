@@ -1,6 +1,8 @@
 import { getOrderDetails } from "@/configs/db"
 import TableOrders from "@/components/TableOrders"
 
+export const dynamic = "force-dynamic";
+
 const Orders = async({params}:{params:{id:string}}) => {
   const orders = await getOrderDetails(params.id)
   return (

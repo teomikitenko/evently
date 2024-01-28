@@ -28,8 +28,11 @@ import { DateTimePicker } from "@mantine/dates";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import type { Event } from "@/configs/types/types";
 import { FileObject } from "@supabase/storage-js";
-/* import { deleteImage } from "@/configs/db";
- */
+import { useRouter } from "next/navigation";
+
+export const dynamic = "force-dynamic";
+
+
 const checkbox = {
   input: {
     border: "2px solid var(--mantine-color-violet-filled)",
@@ -98,6 +101,7 @@ const EventForm = ({
   const [openModal, setOpenModal] = useState(false);
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
+  const router = useRouter()
   const { user } = useUser();
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
@@ -143,9 +147,11 @@ const EventForm = ({
         prevImageName: eventEdit!.storage![0].name,
       };
       await update(editableData);
+     setTimeout(()=>router.push(`/event/${editableData.id}`),500) 
     } else {
       await create(form);
       reset();
+      /* setTimeout(()=>router.push(`/event/${form.g}`),500) */  //todo : doing redirect after creating
     }
   };
 
@@ -280,7 +286,7 @@ const EventForm = ({
                 {file ? (
                   <Preview file={file} />
                 ) : editableImage ? (
-                  <Preview prevImage={eventEdit?.storage as FileObject[]} />
+                  <Preview prevImage={editableImage} />
                 ) : (
                   <ImageContainer />
                 )}
@@ -474,13 +480,12 @@ const Preview = ({
   prevImage,
 }: {
   file?: FileWithPath[];
-  prevImage?: FileObject[];
+  prevImage?: FileObject;
 }) => {
   const imageUrl = file && URL.createObjectURL(file[0]);
-
   return (
     <div className="w-full h-[263px]">
-      {prevImage ? (
+      {prevImage? (
         <Image
           loader={({ src, width, quality }) => {
             return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
@@ -490,7 +495,7 @@ const Preview = ({
           className=" w-full h-full object-cover rounded-2xl "
           width={0}
           height={0}
-          src={`${prevImage[0].name}`}
+          src={`${prevImage.name}`}
           alt="edit-preview"
         />
       ) : (
