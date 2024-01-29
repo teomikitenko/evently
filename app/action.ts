@@ -10,8 +10,10 @@ import { FileObject } from "@supabase/storage-js";
 
 export async function create(formData:FormData) {
   try {
-    await addEvent(formData)
-    revalidatePath('/')  
+    let result = await addEvent(formData)
+     revalidatePath('/')   
+     return result 
+   
   } catch (error) {
     throw error
   }
@@ -20,7 +22,6 @@ export async function create(formData:FormData) {
 export async function update({id,form,prevImage,prevImageName}:{id:string,form:FormData,prevImage?:FileObject,prevImageName:string}) {
     await updateEvent(id,form,prevImage,prevImageName)
     revalidatePath('/')   
-    /* redirect(`/event/${id}`) */
   }
 
 

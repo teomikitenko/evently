@@ -29,34 +29,27 @@ export const updateEvent = async (
             `img/${rest.title}.${prevImage.name.split(".")[1]}`
           ),
         supabase.from("events").update(rest).eq("id", id),
-      ]).then(res=>console.log('success update'))
+      ]).then((res) => console.log("success update"));
     } catch (error) {
       throw error;
     }
   } else {
     const img = form.get("image") as File;
     const type = img.type.split("/")[1];
-try {
-await supabase.storage.from("evently").remove([`img/${prevImageName}`]) 
-   Promise.all([
-    supabase.from("events").update(rest).eq("id", id), 
-    supabase.storage
-      .from("evently")
-      .upload(`img/${rest.title}.${type}`, img, {
-        cacheControl: "3600",
-        upsert: false,
-      }),
-  ])
-  const {data}  = await supabase.storage.from("evently").list("img", {
-    limit: 100,
-    offset: 0,
-    sortBy: { column: "name", order: "asc" },
-    search: rest.title as string,
-  })
-  console.log(data)
-} catch (error) {
-  throw error
-}  
+    try {
+      await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
+      const result = Promise.all([
+        supabase.from("events").update(rest).eq("id", id),
+        supabase.storage
+          .from("evently")
+          .upload(`img/${rest.title}.${type}`, img, {
+            cacheControl: "3600",
+            upsert: false,
+          }),
+      ]);
+    } catch (error) {
+      throw error;
+    }
   }
 };
 
@@ -111,13 +104,13 @@ export async function addEvent(form: FormData) {
   const type = img.type.split("/")[1];
   try {
     const { data } = await supabase.from("events").insert([rest]).select();
-    await supabase.storage
+    const { data: image } = await supabase.storage
       .from("evently")
       .upload(`img/${rest.title}.${type}`, img, {
         cacheControl: "3600",
         upsert: false,
       });
-    redirect(`event/${data![0].id}`);
+     return {event:data,img:image} 
   } catch (error) {
     throw error;
   }

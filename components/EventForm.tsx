@@ -12,6 +12,7 @@ import {
   Checkbox,
   NumberInputHandlers,
   Modal,
+  Loader,
 } from "@mantine/core";
 import { create, update } from "@/app/action";
 import { Dropzone, FileWithPath, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -31,7 +32,6 @@ import { FileObject } from "@supabase/storage-js";
 import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-
 
 const checkbox = {
   input: {
@@ -99,9 +99,10 @@ const EventForm = ({
   const [free, setFree] = useState(false);
   const [categories, setCategories] = useState(["Next Js", "React Js", "Tech"]);
   const [openModal, setOpenModal] = useState(false);
+  const [send, setSend] = useState(false);
   const handlersRef = useRef<NumberInputHandlers>(null);
   const combobox = useCombobox();
-  const router = useRouter()
+  const router = useRouter();
   const { user } = useUser();
   const { control, handleSubmit, reset, formState } = useForm<Values>({
     defaultValues: {
@@ -122,7 +123,7 @@ const EventForm = ({
   });
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
-      setFile(undefined);
+     /*  setFile(undefined); */
     }
   }, [formState.isSubmitSuccessful]);
   useEffect(() => {
@@ -131,6 +132,7 @@ const EventForm = ({
     }
   }, [edit]);
   const onSubmit: SubmitHandler<Values> = async (data) => {
+    setSend(true);
     const form = new FormData();
     Object.entries(data).map((e) => {
       if (e[0] === "image" && Array.isArray(e[1])) {
@@ -147,11 +149,12 @@ const EventForm = ({
         prevImageName: eventEdit!.storage![0].name,
       };
       await update(editableData);
-     setTimeout(()=>router.push(`/event/${editableData.id}`),500) 
+      setTimeout(() => {
+        router.push(`/event/${editableData.id}`);
+      }, 1500);
     } else {
-      await create(form);
-      reset();
-      /* setTimeout(()=>router.push(`/event/${form.g}`),500) */  //todo : doing redirect after creating
+       let data =   await create(form);
+     setTimeout(()=>router.push(`/event/${data.event![0].id}`),1500)  
     }
   };
 
@@ -463,10 +466,23 @@ const EventForm = ({
           />
         </div>
         <button
-          className="w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
+          className={
+            send
+              ? "w-full bg-violet-300 rounded-full py-2 relative"
+              : "w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
+          }
           type="submit"
         >
-          <p className="text-white">{edit ? "Edit" : "Create Event"}</p>
+          <div>
+            <p className="text-white text-center ">
+              {edit ? "Edit" : "Create Event"}
+            </p>
+          </div>
+          {send && (
+            <div className="w-full absolute top-[0.19rem]  flex justify-center">
+              <Loader color="blue" type="dots" />
+            </div>
+          )}
         </button>
       </form>
     </>
@@ -485,7 +501,7 @@ const Preview = ({
   const imageUrl = file && URL.createObjectURL(file[0]);
   return (
     <div className="w-full h-[263px]">
-      {prevImage? (
+      {prevImage ? (
         <Image
           loader={({ src, width, quality }) => {
             return `https://vthbjyvxqzqwhycurblq.supabase.co/storage/v1/object/public/evently/img/${src}?w=${width}&q=${
