@@ -11,36 +11,41 @@ const TableOrders = ({ orders }: { orders: Orders }) => {
   ];
   const bodyRows = orders.map((o) => {
     const currentPrice = o.events?.free ? "Free" : o.events?.price;
-    return (
+    return (  
       <Table.Tr className="w-full" key={o.id}>
-        <Table.Td className="w-[calc(100%/5)]">
-          <p className="line-clamp-1 break-words">{o.order_id}</p>
-        </Table.Td>
-        <Table.Td className="w-[calc(100%/5)]">
-          <p className="line-clamp-1 break-words">{o.events?.title}</p>
-        </Table.Td>
-        <Table.Td className="w-[calc(100%/5)]">
-          <p className="line-clamp-1 break-words">{o.name}</p>
-        </Table.Td>
-        <Table.Td className="w-[calc(100%/5)]">
-          <p className="line-clamp-1 break-words">{o.created_at.split("T")[0]}</p>
-        </Table.Td>
-        <Table.Td className="w-[calc(100%/5)]">
-          <p className="line-clamp-1 break-words">{currentPrice}</p>
-        </Table.Td>
-      </Table.Tr>
+      <Table.Td className="w-[calc(100%/5)]">
+        <p className="line-clamp-1 break-words">{o.order_id}</p>
+      </Table.Td>
+      <Table.Td className="w-[calc(100%/5)]">
+        <p className="line-clamp-1 break-words">{o.events?.title}</p>
+      </Table.Td>
+      <Table.Td className="w-[calc(100%/5)]">
+        <p className="line-clamp-1 break-words">{o.name}</p>
+      </Table.Td>
+      <Table.Td className="w-[calc(100%/5)]">
+        <p className="line-clamp-1 break-words">{o.created_at.split("T")[0]}</p>
+      </Table.Td>
+      <Table.Td className="w-[calc(100%/5)]">
+        <p className="line-clamp-1 break-words">{currentPrice}</p>
+      </Table.Td>
+    </Table.Tr>     
+ 
     );
   });
   return (
     <Table horizontalSpacing={"xl"} layout="fixed">
       <Table.Thead>
         <Table.Tr>
-          {tableHeaders.map((e) => (
+          { tableHeaders.map((e) => (
             <Table.Th key={e}>{e}</Table.Th>
           ))}
         </Table.Tr>
       </Table.Thead>
-      <Table.Tbody>{bodyRows}</Table.Tbody>
+      <Table.Tbody>{
+      orders.length === 0?
+      <NotFoundDetails/>
+      :
+      bodyRows}</Table.Tbody>
     </Table>
   );
 };
@@ -48,5 +53,11 @@ const TableOrders = ({ orders }: { orders: Orders }) => {
 export default TableOrders;
 
 const NotFoundDetails = () => {
-  return <p>not found</p>;
+  return (
+    <Table.Tr className="w-full">
+    <Table.Td colSpan={5} className="w-full text-center">
+  <p className="line-clamp-1 break-words">Not found details</p>
+</Table.Td>
+</Table.Tr>
+  )
 };

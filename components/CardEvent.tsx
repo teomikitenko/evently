@@ -71,7 +71,7 @@ const CardEvent = ({
             {event.startDate?.split(" ").slice(0, 5).join(" ")}
           </Text>
           <Link href={`/event/${event.id}`}>
-            <Text size="lg" lineClamp={2} fw={500}>
+            <Text size="lg" lineClamp={1} fw={500}>
               {event.title}
             </Text>
           </Link>

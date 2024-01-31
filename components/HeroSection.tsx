@@ -1,40 +1,26 @@
 import React from "react";
 import hero from "../public/assets/images/hero.png";
 import Image from "next/image";
-import { Text, Button } from "@mantine/core";
 
 const HeroSection = () => {
   return (
     <section>
-      <div className="dotted-bg h-full w-full flex px-10  py-9 gap-5">
-        <div className="flex flex-col  gap-7 w-1/2">
-          <Text
-            size="xl"
-            component="h1"
-            style={{ fontSize: "58px", lineHeight: "74px" }}
-            fw={700}
-          >
+      <div className="dotted-bg h-full w-full flex flex-col md:flex-row  px-10  py-9 gap-5">
+        <div className="flex flex-col  gap-7 md:w-1/2">
+          <h1 className="text-4xl leading-snug lg:text-5xl lg:leading-snug xl:leading-snug xl:text-6xl font-bold">
             Host, Connect, Celebrate: Your Events, Our Platform!
-          </Text>
-          <Text fw={400} style={{ fontSize: "24px", lineHeight: "36px" }}>
+          </h1>
+          <h2 className="text-xl lg:text-2xl">
             Book and learn helpful tips from 3,168+ mentors in world-class
             companies with our global community.
-          </Text>
-
-          <Button
-            size="md"
-            style={{ width: "max-content" }}
-            variant="filled"
-            color="violet"
-            radius="xl"
-            px={27}
-          >
-            <a href="#events">
-            <Text size="sm">Explore now</Text>
+          </h2>
+          <button className="sm:w-fit px-6 py-3 rounded-3xl bg-[rgb(98,76,245)]">
+          <a href="#events">
+              <p className="text-white">Explore now</p>
             </a>
-          </Button>
+          </button>
         </div>
-        <div className="w-1/2 flex justify-center ">
+        <div className="md:w-1/2 flex justify-center ">
           <Image
             src={hero}
             className="max-h-[80vh] object-contain"
@@ -49,3 +35,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+

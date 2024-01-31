@@ -65,7 +65,7 @@ export const Events = ({
   images: FileObject[];
 }) => {
   return (
-    <div className="grid gap-9 grid-cols-3">
+    <div className="grid auto-cols-fr lg:gap-9 lg:grid-cols-3 2xl:grid-cols-4 2xl:gap-9 sm:grid-cols-2 grid-cols-1  gap-4 gap-y-5">
       {events!.map((e) => {
         const image = images.filter(
           (img) => img.name.split(".")[0] === e.title

@@ -31,9 +31,8 @@ export default function RootLayout({
           <MantineProvider
             theme={{
               fontFamily: poppins.className,
-            }}
-          >
-            <div className="flex flex-col h-screen  ">{children}</div>
+            }}>
+            <div className="flex flex-col h-screen overflow-x-hidden min-w-[430px]">{children}</div>
           </MantineProvider>
         </body>
       </html>

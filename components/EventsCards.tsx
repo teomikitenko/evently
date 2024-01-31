@@ -16,7 +16,6 @@ export const fons = {
 };
 
 const EventsCards = ({ data }: { data: DB }) => {
-  const[opened,setOpened] = useState(false)
   const [text, setText] = useState<string>("");
   const [value, setValue] = useState("Category");
   const [categories, setCategories] = useState<string[]>([]);
@@ -40,7 +39,7 @@ const EventsCards = ({ data }: { data: DB }) => {
           Thousands of Events
         </Text>
       </div>
-      <div className="flex  gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <TextInput
           leftSection={
             <Image src={search} width={24} height={24} alt="search" />
@@ -68,7 +67,7 @@ const EventsCards = ({ data }: { data: DB }) => {
           <Combobox.Target>
             <div
               onClick={() => combobox.toggleDropdown()}
-              className="w-[50%] cursor-pointer"
+              className="w-full sm:w-[50%] cursor-pointer"
             >
               <TextInput
                 pointer
