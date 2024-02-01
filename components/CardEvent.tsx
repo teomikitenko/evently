@@ -40,17 +40,17 @@ const CardEvent = ({
         radius="md"
         withBorder
       >
-        <Card.Section>
+        <Card.Section >
           <Link href={`/event/${event.id}`}>
-            <div className="h-[222px]">
-              <Image
-                className="object-cover w-full h-full"
+            <div className="w-full relative pb-[52%]">
+               <Image
+                className="w-full h-full object-cover absolute top-0 left-0"
                 src={`${image![0].name}`}
                 loader={myLoader}
                 width={1000}
-                height={360}
-                alt="Norway"
-              />
+                height={1000}
+                alt="event-card-image"
+              /> 
             </div>
           </Link>
         </Card.Section>
