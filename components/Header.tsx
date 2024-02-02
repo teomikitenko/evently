@@ -25,7 +25,7 @@ const Burger = ({
     <div
       className={
         open
-          ? "transition-all absolute w-[55%] dotted-bg h-screen top-0 right-0 translate-x-0"
+          ? "transition-all absolute w-[55%] dotted-bg h-screen top-0 right-0 translate-x-0 z-50"
           : "opacity-0 md:hidden transition-all absolute w-[55%] dotted-bg h-screen top-0 right-0 translate-x-[100%]"
       }
     >

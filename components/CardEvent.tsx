@@ -9,6 +9,8 @@ import edit from "@/public/assets/icons/edit.svg";
 import arrow from "@/public/assets/icons/arrow.svg";
 import { useEffect, useState } from "react";
 import { deleteEventsId } from "@/app/action";
+export const dynamic = "force-dynamic";
+
 
 const CardEvent = ({
   event,
@@ -42,7 +44,7 @@ const CardEvent = ({
       >
         <Card.Section >
           <Link href={`/event/${event.id}`}>
-            <div className="w-full relative pb-[52%]">
+            <div className="w-full relative aspect-[2/1]">
                <Image
                 className="w-full h-full object-cover absolute top-0 left-0"
                 src={`${image![0].name}`}
