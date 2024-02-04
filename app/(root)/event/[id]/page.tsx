@@ -11,7 +11,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
     event.event.id
   );
   return (
-    <section className="py-9 w-full h-full flex flex-col gap-8 lg:gap-16 ">
+    <section className="pb-9 py-0 lg:py-9 w-full h-full flex flex-col gap-8 lg:gap-16 ">
       <div className="dotted-bg w-full h-full">
       <Event event={event}/>
       </div>

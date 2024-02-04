@@ -34,15 +34,9 @@ const Checkout = ({ event }: { event: Event }) => {
   };
   return (
     <form action={submitHandler}>
-      <Button
-        type="submit"
-        variant="filled"
-        color="violet"
-        radius="xl"
-        size="md"
-      >
-        <p className="text-sm">Buy Ticket</p>
-      </Button>
+      <button className="px-6 py-3 rounded-3xl bg-[rgb(98,76,245)]">
+        <p className="text-sm text-white">Buy Ticket</p>
+      </button>
     </form>
   );
 };

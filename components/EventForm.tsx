@@ -7,7 +7,6 @@ import {
   useCombobox,
   Combobox,
   Text,
-  Button,
   NumberInput,
   Checkbox,
   NumberInputHandlers,
@@ -32,48 +31,6 @@ import { FileObject } from "@supabase/storage-js";
 import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
-
-const checkbox = {
-  input: {
-    border: "2px solid var(--mantine-color-violet-filled)",
-  },
-  label: {
-    fontFamily: "var(--font-poppins)",
-    fontSize: "16px",
-    fontWeight: "400",
-  },
-};
-
-export const fons2 = {
-  input: {
-    fontFamily: "var(--font-poppins)",
-    fontSize: "16px",
-    fontWeight: "400",
-  },
-};
-const picker = {
-  input: {
-    fontFamily: "var(--font-poppins)",
-    fontSize: "16px",
-    fontWeight: "400",
-    paddingTop: "15px",
-    paddingBottom: "15px",
-  },
-};
-const numb = {
-  input: {
-    fontFamily: "var(--font-poppins)",
-    fontSize: "16px",
-    fontWeight: "400",
-    paddingTop: "15px",
-    paddingBottom: "15px",
-  },
-};
-const drop = {
-  inner: {
-    width: "100%",
-  },
-};
 
 export type Values = {
   title: string;
@@ -123,7 +80,7 @@ const EventForm = ({
   });
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
-     /*  setFile(undefined); */
+      /*  setFile(undefined); */
     }
   }, [formState.isSubmitSuccessful]);
   useEffect(() => {
@@ -153,8 +110,8 @@ const EventForm = ({
         router.push(`/event/${editableData.id}`);
       }, 1500);
     } else {
-       let data =   await create(form);
-     setTimeout(()=>router.push(`/event/${data.event![0].id}`),1500)  
+      let data = await create(form);
+      setTimeout(() => router.push(`/event/${data.event![0].id}`), 1500);
     }
   };
 
@@ -165,22 +122,26 @@ const EventForm = ({
         opened={openModal}
         setCategories={setCategories}
       />
-      <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex gap-3">
+      <form
+        className="flex flex-col gap-3 md:gap-8"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="flex flex-col md:flex-row gap-3">
           <Controller
             name="title"
             control={control}
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <TextInput
-                classNames={{ input: "poppins" }}
+                classNames={{
+                  input: "!font-poppins !text-sm sm:!text-base font-normal",
+                }}
                 value={value}
                 size="lg"
-                styles={fons}
                 onChange={onChange}
                 onBlur={onBlur}
                 placeholder="Event title"
                 radius="lg"
-                className="w-[50%]"
+                className="w-full md:w-[50%] "
                 variant="filled"
               />
             )}
@@ -207,7 +168,7 @@ const EventForm = ({
                 <Combobox.Target>
                   <div
                     onClick={() => combobox.toggleDropdown()}
-                    className="w-[50%] cursor-pointer"
+                    className="w-full md:w-[50%] cursor-pointer"
                   >
                     <TextInput
                       onBlur={onBlur}
@@ -220,7 +181,10 @@ const EventForm = ({
                         />
                       }
                       size="lg"
-                      styles={fons}
+                      classNames={{
+                        input:
+                          "!font-poppins !text-sm sm:!text-base font-normal",
+                      }}
                       readOnly
                       radius="lg"
                       variant="filled"
@@ -246,14 +210,16 @@ const EventForm = ({
             )}
           />
         </div>
-        <div className="flex  gap-3 ">
+        <div className="flex flex-col md:flex-row gap-3 ">
           <Controller
             name="description"
             control={control}
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <Textarea
-                className="w-[50%]"
-                styles={fons2}
+                className="w-full md:w-[50%]"
+                classNames={{
+                  input: "!font-poppins !text-sm sm:!text-base font-normal",
+                }}
                 radius="lg"
                 variant="filled"
                 onChange={onChange}
@@ -277,7 +243,7 @@ const EventForm = ({
                     width: "100%",
                   },
                 }}
-                className="flex w-[50%] rounded-2xl  "
+                className="flex w-full md:w-[50%] rounded-2xl  "
                 accept={IMAGE_MIME_TYPE}
                 maxFiles={1}
                 onDrop={(file) => {
@@ -304,8 +270,9 @@ const EventForm = ({
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <TextInput
                 size="50"
-                classNames={{ input: "poppins" }}
-                styles={fons}
+                classNames={{
+                  input: "!font-poppins !text-sm sm:!text-base font-normal",
+                }}
                 leftSection={
                   <Image src={location} width={24} height={24} alt="location" />
                 }
@@ -314,27 +281,30 @@ const EventForm = ({
                 value={value}
                 placeholder="Event title"
                 radius="lg"
-                className="grow "
+                className="grow"
                 variant="filled"
               />
             )}
           />
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-col md:flex-row gap-3">
           <Controller
             name="startDate"
             control={control}
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <DateTimePicker
-                className="w-[50%]"
+                className="w-full md:w-[50%]"
                 radius="lg"
                 variant="filled"
                 value={value as Date}
-                valueFormat="ddd, MMM D, YYYY h:mm A"
+                valueFormat="ddd, MMM D, YYYY h:mm"
                 onChange={onChange}
                 onBlur={onBlur}
-                styles={picker}
-                leftSectionWidth={130}
+                classNames={{
+                  input:
+                    "!font-poppins !text-sm sm:!text-base font-normal !py-3.5",
+                }}
+                leftSectionWidth={90}
                 leftSection={
                   <div className="flex gap-1">
                     <div className="flex items-start">
@@ -347,7 +317,7 @@ const EventForm = ({
                       />
                     </div>
                     <div>
-                      <p>Start Date:</p>
+                      <p>Start:</p>
                     </div>
                   </div>
                 }
@@ -359,16 +329,18 @@ const EventForm = ({
             control={control}
             render={({ field: { onChange, onBlur, value, ref } }) => (
               <DateTimePicker
-                className="w-[50%]"
-                clearable
+                className="w-full md:w-[50%]"
                 radius="lg"
                 value={value as Date}
                 variant="filled"
-                valueFormat="ddd, MMM D, YYYY h:mm A"
+                valueFormat="ddd, MMM D, YYYY h:mm"
                 onChange={onChange}
                 onBlur={onBlur}
-                styles={picker}
-                leftSectionWidth={130}
+                classNames={{
+                  input:
+                    "!font-poppins !text-sm sm:!text-base font-normal !py-3.5",
+                }}
+                leftSectionWidth={90}
                 leftSection={
                   <div className="flex gap-2">
                     <div className="flex items-start">
@@ -380,14 +352,14 @@ const EventForm = ({
                         alt="location"
                       />
                     </div>
-                    <p>End Date:</p>
+                    <p>End:</p>
                   </div>
                 }
               />
             )}
           />
         </div>
-        <div className="flex gap-3">
+        <div className="flex md:flex-row flex-col gap-3">
           <Controller
             name="price"
             control={control}
@@ -395,7 +367,10 @@ const EventForm = ({
               <NumberInput
                 handlersRef={handlersRef}
                 size="lg"
-                styles={numb}
+                classNames={{
+                  input:
+                    "!font-poppins !text-sm sm:!text-base font-normal !py-3.5",
+                }}
                 readOnly={free}
                 leftSection={
                   <Image src={dollar} width={24} height={24} alt="dollar" />
@@ -426,7 +401,12 @@ const EventForm = ({
                     <Checkbox
                       labelPosition="left"
                       label="Free ticket"
-                      styles={checkbox}
+                      classNames={{
+                        label:
+                          "!font-poppins !text-sm sm:!text-base font-normal ",
+                        input:
+                          "border-2 border-solid border-[var(--mantine-color-violet-filled)] ",
+                      }}
                       color="violet"
                       checked={free}
                       onChange={(event) => setFree(event.currentTarget.checked)}
@@ -438,7 +418,7 @@ const EventForm = ({
                 value={free ? "" : value}
                 placeholder="Price"
                 radius="lg"
-                className="w-[50%]"
+                className="w-full md:w-[50%]"
                 variant="filled"
               />
             )}
@@ -459,7 +439,7 @@ const EventForm = ({
                 value={value}
                 placeholder="URL"
                 radius="lg"
-                className="w-[50%]"
+                className="w-full md:w-[50%]"
                 variant="filled"
               />
             )}
@@ -469,12 +449,12 @@ const EventForm = ({
           className={
             send
               ? "w-full bg-violet-300 rounded-full py-2 relative"
-              : "w-full bg-violet-500 rounded-full py-2 hover:bg-violet-600"
+              : "w-full bg-[rgb(98,76,245)] rounded-full py-2 hover:bg-[rgb(129,111,245)]"
           }
           type="submit"
         >
           <div>
-            <p className="text-white text-center ">
+            <p className="text-white text-center text-sm sm:text-base ">
               {edit ? "Edit" : "Create Event"}
             </p>
           </div>
@@ -530,15 +510,15 @@ const Preview = ({
 const ImageContainer = () => {
   return (
     <div className="flex justify-center items-center w-full h-full">
-      <div className="flex w-[50%]  flex-col gap-4">
+      <div className="flex w-[50%] mb-2  flex-col gap-3 md:gap-4">
         <div className="flex justify-center">
           <Image src={upload} width={77} height={77} alt="download" />
         </div>
-        <p className="text-center">Drag photo here</p>
-        <p className="text-center">SVG, PNG, JPG</p>
-        <Button variant="filled" color="violet" radius="xl">
-          <Text size="sm">Select from computer</Text>
-        </Button>
+        <p className="text-center text-sm sm:text-base">Drag photo here</p>
+        <p className="text-center text-sm sm:text-base">SVG, PNG, JPG</p>
+        <button type="button" className="px-4 py-2 rounded-3xl bg-[rgb(98,76,245)]">
+          <p className="text-sm text-white">Select image</p>
+        </button>
       </div>
     </div>
   );
@@ -564,7 +544,7 @@ const ModalCategory = ({
   }, [sended]);
   return (
     <Modal
-      size="40%"
+      size="55%"
       radius="lg"
       centered
       withCloseButton={false}
@@ -578,22 +558,24 @@ const ModalCategory = ({
       <div className="flex flex-col gap-2">
         <p className="font-bold text-lg">New Category</p>
         <TextInput
-          styles={fons2}
+          classNames={{
+            input: "!font-poppins !text-sm sm:!text-base font-normal",
+          }}
           radius="lg"
           size="md"
           placeholder="Category Name"
           onChange={(e) => setValue(e.currentTarget.value)}
         />
-        <div className="flex gap-2 mt-3 justify-end">
+        <div className="flex gap-2 mt-3  sm:justify-end">
           <button
             type="button"
             onClick={() => setOpened(false)}
-            className=" rounded-lg text-black text-sm px-3  py-2 border"
+            className=" rounded-lg text-black text-sm w-full sm:w-min sm:px-3  py-2 border"
           >
             <p>Cancel</p>
           </button>
           <button
-            className="bg-violet-600 rounded-lg text-sm  text-white hover:bg-violet-500 px-3  py-2 border "
+            className="bg-violet-600 rounded-lg text-sm w-full sm:w-min text-white hover:bg-violet-500 sm:px-3 py-2 border "
             onClick={() => {
               setSended(true);
               setOpened(false);

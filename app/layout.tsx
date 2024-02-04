@@ -27,12 +27,12 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="scroll-smooth">
-        <body className={poppins.className}>
+        <body className={poppins.className}> 
           <MantineProvider
             theme={{
               fontFamily: poppins.className,
             }}>
-            <div className="flex flex-col overflow-x-hidden min-w-[360px]">{children}</div>
+            <div id="parent" className="flex flex-col overflow-x-hidden min-w-[360px] relative">{children}</div>
           </MantineProvider>
         </body>
       </html>

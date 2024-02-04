@@ -30,7 +30,7 @@ const EventsCards = ({ data }: { data: DB }) => {
   }, [data]);
 
   return (
-    <section className="flex flex-col px-10 pt-10  gap-12">
+    <section className="flex flex-col px-10 pt-10  gap-12 ">
       <div id="events">
         <Text fw={700} style={{ fontSize: "40px", lineHeight: "48px" }}>
           Trust by

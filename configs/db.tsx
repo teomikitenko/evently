@@ -35,7 +35,7 @@ export const updateEvent = async (
     }
   } else {
     const img = form.get("image") as File;
-    const type = img.type.split("/")[1];
+    const type = img!.type!.split("/")[1];
     try {
       await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
       const result = Promise.all([
