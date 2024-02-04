@@ -102,7 +102,7 @@ export default CardEvent;
 const EditBadge = ({ eventId }: { eventId: string }) => {
   const [opened, setOpened] = useState(false);
   return (
-    <div className="animation-badge group-hover:opacity-100  flex flex-col py-2 px-2 gap-3 rounded-lg">
+    <div className="animation-badge opacity-100 lg:opacity-0 lg:group-hover:opacity-100 absolute top-3 right-3 gap-3 sm:gap-0 flex flex-col py-2 px-2 md:gap-3 rounded-lg">
       <Link href={`event/${eventId}/edit`}>
         <button>
           <Image src={edit} width={20} height={20} alt="edit" />
@@ -116,7 +116,7 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
         <Image src={del} width={20} height={20} alt="del" />
       </button>
       <Modal
-        size="40%"
+        size="60%"
         radius="lg"
         centered
         withCloseButton={false}
