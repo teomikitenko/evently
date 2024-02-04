@@ -100,7 +100,7 @@ const Header = () => {
         </Link>
         <SignedOut>
           <SignUpButton>
-            <div className="w-full">
+            <div className="w-max">
               <Button
                 variant="filled"
                 color="violet"
