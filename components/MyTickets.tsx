@@ -16,19 +16,22 @@ const MyTickets = ({
     <section>
       <div className="dotted-bg w-full">
         <div className="flex justify-between py-14 px-10">
-          <p className="text-4xl font-bold">My Tickets</p>
+          <p className="text-2xl md:text-4xl font-bold flex items-center">My Tickets</p>
           <Link href={"/#events"}>
             <button
-              className="bg-violet-600 rounded-full py-3 px-6 hover:bg-violet-500"
+              className="bg-[rgb(98,76,245)] rounded-full py-3 px-6 hover:hover:bg-[rgb(129,111,245)]"
               type="button"
             >
-              <p className="text-white">Explore More Events</p>
+              <div className="flex">
+                <p className="text-white ">Explore</p>
+                <p className="text-white hidden sm:block">&nbsp;More Events</p>
+              </div>
             </button>
           </Link>
         </div>
       </div>
       {data.length > 0 ? (
-        <div className="grid gap-9 grid-cols-3 py-6 px-10">
+        <div className="grid lg:gap-5 lg:grid-cols-3 2xl:grid-cols-4 2xl:gap-9 sm:grid-cols-2 grid-cols-1 py-6 px-10">
           {data.map((e) => {
             const image = images!.filter(
               (img) => img.name.split(".")[0] === e.events.title

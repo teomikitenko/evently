@@ -448,7 +448,7 @@ const EventForm = ({
         <button
           className={
             send
-              ? "w-full bg-violet-300 rounded-full py-2 relative"
+              ? "w-full bg-[rgb(129,111,245)] rounded-full py-2 relative"
               : "w-full bg-[rgb(98,76,245)] rounded-full py-2 hover:bg-[rgb(129,111,245)]"
           }
           type="submit"
