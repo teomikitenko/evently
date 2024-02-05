@@ -79,11 +79,6 @@ const EventForm = ({
     },
   });
   useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      /*  setFile(undefined); */
-    }
-  }, [formState.isSubmitSuccessful]);
-  useEffect(() => {
     if (edit) {
       setEditableImage(eventEdit!.storage![0]);
     }
@@ -99,6 +94,7 @@ const EventForm = ({
     form.append("free", JSON.stringify(free));
     form.append("creater", user?.fullName!);
     if (edit) {
+      if(data.image)form.append("img_type",data.image[0].type.split('/')[1])
       const editableData = {
         id: eventEdit?.event.id!,
         form: form,
@@ -110,8 +106,9 @@ const EventForm = ({
         router.push(`/event/${editableData.id}`);
       }, 1500);
     } else {
-      let data = await create(form);
-      setTimeout(() => router.push(`/event/${data.event![0].id}`), 1500);
+      form.append("img_type",data.image[0].type.split('/')[1])
+      let res = await create(form);
+      setTimeout(() => router.push(`/event/${res.event![0].id}`), 1500);
     }
   };
 
@@ -279,7 +276,7 @@ const EventForm = ({
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value}
-                placeholder="Event title"
+                placeholder="Location"
                 radius="lg"
                 className="grow"
                 variant="filled"

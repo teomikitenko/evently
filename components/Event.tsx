@@ -9,6 +9,8 @@ import Checkout from "./Checkout";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 const Event = ({ event }: { event: Event }) => {
   const { user } = useUser();
   const router = useRouter();

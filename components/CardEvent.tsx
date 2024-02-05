@@ -8,7 +8,7 @@ import del from "@/public/assets/icons/delete.svg";
 import edit from "@/public/assets/icons/edit.svg";
 import arrow from "@/public/assets/icons/arrow.svg";
 import { useEffect, useState } from "react";
-import { deleteEventsId } from "@/app/action";
+import { deleteEvents } from "@/app/action";
 export const dynamic = "force-dynamic";
 
 
@@ -84,7 +84,10 @@ const CardEvent = ({
             {org && (
               <Link href={`event/${event.id}/orders`}>
                 <div className="flex gap-2">
-                  <p className="text-center text-[#624CF5]">Order Detail</p>
+                  <div className="flex">
+                  <p className="text-center sm:block hidden text-[#624CF5]">Order&nbsp;</p>
+                  <p className="text-center text-[#624CF5]">Detail</p>
+                  </div>
                   <Image src={arrow} width={10} height={10} alt="arrow" />
                 </div>
               </Link>
@@ -92,14 +95,14 @@ const CardEvent = ({
           </div>
         </div>
       </Card>
-      {organized && <EditBadge eventId={event.id} />}
+      {organized && <EditBadge  eventId={event.id} name={event.title as string} type = {event.img_type as string} />}
     </div>
   );
 };
 
 export default CardEvent;
 
-const EditBadge = ({ eventId }: { eventId: string }) => {
+const EditBadge = ({ eventId,name,type }: { eventId: string,name:string,type:string }) => {
   const [opened, setOpened] = useState(false);
   return (
     <div className="animation-badge opacity-100 lg:opacity-0 lg:group-hover:opacity-100 absolute top-3 right-3 gap-3 sm:gap-0 flex flex-col py-2 px-2 md:gap-3 rounded-lg">
@@ -129,7 +132,7 @@ const EditBadge = ({ eventId }: { eventId: string }) => {
       >
         <form
           action={async () => {
-            await deleteEventsId(eventId);
+            await deleteEvents(eventId,name,type);
             setTimeout(() => setOpened(false), 1000);
           }}
         >

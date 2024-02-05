@@ -10,18 +10,21 @@ import { FileObject } from "@supabase/storage-js";
 
 export async function create(formData:FormData) {
   try {
-    let result = await addEvent(formData)
-     revalidatePath('/')   
+    let result = await addEvent(formData)  
      return result 
    
   } catch (error) {
     throw error
   }
+  
 }
 
 export async function update({id,form,prevImage,prevImageName}:{id:string,form:FormData,prevImage?:FileObject,prevImageName:string}) {
+  try{
     await updateEvent(id,form,prevImage,prevImageName)
-    revalidatePath('/')   
+  }catch(error){
+  }
+    revalidatePath('/','layout')   
   }
 
 
@@ -58,11 +61,12 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!);
   }  
 
   }
-  export async function deleteEventsId(id:string){
+
+  export async function deleteEvents(id:string,name:string,type:string){
   try {
-    await deleteEvent(id)
-    revalidatePath('/','layout')
+    await deleteEvent(id,name,type)
   } catch (error) {
     throw error
   }
+  revalidatePath('/','layout')
   }

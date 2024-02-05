@@ -4,8 +4,6 @@ import type { DB } from "@/configs/types/types";
 import { useEffect, useState } from "react";
 import { FileObject } from "@supabase/storage-js";
 
-export const dynamic = "force-dynamic";
-
 const CardFields = ({
   data,
   category,

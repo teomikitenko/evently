@@ -3,7 +3,6 @@ import { Database } from "./types/supabase";
 import type { Buyer } from "./types/types";
 import { Tickets } from "./types/types";
 import { FileObject } from "@supabase/storage-js";
-import { permanentRedirect, redirect } from "next/navigation";
 
 export const supabase = createClient<Database>(
   process.env.NEXT_PUBLIC_SUPABASE_URL as string,
@@ -36,16 +35,26 @@ export const updateEvent = async (
   } else {
     const img = form.get("image") as File;
     const type = img!.type!.split("/")[1];
+
     try {
-      await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
-      const result = Promise.all([
+      if (prevImageName !== `${rest.title}.${type}`) {
+        await supabase.storage.from("evently").remove([`img/${prevImageName}`]);
+      }
+      console.log({
+        message: "im in else",
+        imageToDelete: prevImageName,
+        imageToUpload: `img/${rest.title}.${type}`,
+      });
+
+      await Promise.all([
         supabase.from("events").update(rest).eq("id", id),
         supabase.storage
           .from("evently")
           .upload(`img/${rest.title}.${type}`, img, {
-            cacheControl: "3600",
-            upsert: false,
-          }),
+            cacheControl: "0",
+            upsert: true,
+          })
+          .then((res) => console.log(res)),
       ]);
     } catch (error) {
       throw error;
@@ -110,7 +119,7 @@ export async function addEvent(form: FormData) {
         cacheControl: "3600",
         upsert: false,
       });
-     return {event:data,img:image} 
+    return { event: data, img: image };
   } catch (error) {
     throw error;
   }
@@ -194,13 +203,11 @@ export async function getOrderDetails(id: string) {
   return data;
 }
 
-export async function deleteEvent(id: string) {
+export async function deleteEvent(id: string, name: string, type: string) {
+  console.log(`img/${name}.${type}`);
   try {
-    const { error } = await supabase.from("events").delete().eq("id", id);
-    /*       await supabase
-  .storage
-  .from('evently')        //add name property
-  .remove([name])  */
+    await supabase.from("events").delete().eq("id", id);
+    await supabase.storage.from("evently").remove([`img/${name}.${type}`]);
   } catch (error) {
     throw error;
   }

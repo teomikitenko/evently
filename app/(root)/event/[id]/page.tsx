@@ -13,9 +13,9 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
   return (
     <section className="pb-9 py-0 lg:py-9 w-full h-full flex flex-col gap-8 lg:gap-16 ">
       <div className="dotted-bg w-full h-full">
-      <Event event={event}/>
+        <Event event={event} />
       </div>
-      <Related related={relatedEvents}/>
+      <Related related={relatedEvents} />
     </section>
   );
 };
